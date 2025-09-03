@@ -1,0 +1,20 @@
+.peek-gallery {
+    background-color: rgb(192, 148, 81);
+    margin: 1rem;
+    padding: 0.5rem;
+    width: 100vw;
+    border-radius: 1rem;
+}
+.peek-gallery-header {
+
+}
+.peek-gallery-header-subtitle {
+
+}
+.peek-gallery-header-title {
+
+}
+.peek-gallery-body {
+    display: flex;
+    justify-content: space-between;
+}

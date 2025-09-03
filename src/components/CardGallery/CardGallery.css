@@ -1,0 +1,20 @@
+.card-gallery {
+    background-color: rgb(107, 56, 155);
+    margin: 1rem;
+    padding: 0.5rem;
+    width: 100vw;
+    border-radius: 1rem;
+}
+.card-gallery-header {
+
+}
+.card-gallery-header-title {
+
+}
+.card-gallery-header-title-subtitle {
+
+}
+.card-gallery-body {
+    display: flex;
+    justify-content: space-between;
+}
