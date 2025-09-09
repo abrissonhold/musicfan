@@ -9,7 +9,7 @@ function Footer({footerItems}: FooterProps) {
         <footer className="footer">
             <ul className="footer-list">
               {footerItems.map((item: string, index: number) => 
-                <li className="footer-list-item">
+                <li className="footer-list-item" key={index}>
                   {item}
                 </li>
               )}                
