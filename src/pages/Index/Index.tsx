@@ -175,8 +175,8 @@ function generateTrackGallery(tracks: Track[]){
   })
   const trackGalleryProps: CardGalleryProps = {
     cardPropsArray: trackData,
-    galleryTitle: "Dummy Gallery",
-    gallerySubtitle: "Dummy Gallery Subtitle"
+    galleryTitle: "Exitos",
+    gallerySubtitle: "Los mejores éxitos del momento"
   }
   return trackGalleryProps;
 }
@@ -192,9 +192,9 @@ function generateArtistGallery(artists: ArtistPeek[]){
   })
   const artistGalleryProps: PeekGalleryProps = {
     peekPropsArray: peekData,
-    upperSubtitle: 'Top Artists',
-    title: "Artists",
-    lowerSubtitle: "Top Artists"
+    upperSubtitle: 'Estos son los artistas más populares',
+    title: "Artistas",
+    lowerSubtitle: "Top 4 Artistas"
   }
   return artistGalleryProps;
 }

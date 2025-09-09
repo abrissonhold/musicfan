@@ -28,6 +28,7 @@
     margin-top: 0.75rem;
     object-fit: cover;
     border-radius: var(--dl-layout-radius-imageradius);
+    align-self: center;
 }
 
 .card-description {

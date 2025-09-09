@@ -44,19 +44,14 @@
 
 .peek-gallery-body {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+
     justify-content: center;
     align-items: center;
-    border-radius: var(--dl-layout-radius-radius8);
     padding: var(--dl-layout-space-unit);
-    gap: 0;
-    display: grid;
+    gap: 2rem;
     overflow: auto;
     padding-top: var(--dl-layout-space-halfunit);
-    place-items: center;
-    padding-left: var(--dl-layout-space-unit);
-    padding-right: var(--dl-layout-space-unit);
     padding-bottom: var(--dl-layout-space-halfunit);
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 1fr;
+    color: var(--dl-color-gray-white);
 }
