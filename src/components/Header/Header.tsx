@@ -8,6 +8,7 @@ function Header({navItems}: HeaderProps) {
     <>
         <header className="header">
             <nav className="header-nav">
+                <img alt="Company Logo" src="src\assets\logoWhite.png" loading="lazy" className="navbar-image1" />
                 <ul className="header-nav-list">
                     { navItems.map((item: string, index: number) => 
                     <li className="header-nav-list-item" key={index}>
