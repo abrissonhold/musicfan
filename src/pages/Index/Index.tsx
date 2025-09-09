@@ -157,7 +157,7 @@ function Index() {
         <Header navItems={navItems}></Header>
         <CardGallery {...trackGalleryProps}></CardGallery>
         <PeekGallery {...artistGalleryProps}></PeekGallery>
-        <Footer footerItems={footerItems}></Footer>
+        <Footer></Footer>
       </div>
     </>
   )
