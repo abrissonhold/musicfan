@@ -65,17 +65,11 @@ function Index() {
   const baseUrl = new URL('https://ws.audioscrobbler.com/2.0/?');
   const API_KEY = '38c33b10c98373d07e536e89fee77c1e'
   const navItems = [
-    "item1",
-    "item2",
-    "item3"
+    "Exitos",
+    "Tus favoritos",
+    "Artistas destacados"
   ] 
-  const footerItems = [
-    "item1",
-    "item2",
-    "item3",
-    "item4",
-    "item5",
-  ]
+
   useEffect(() => {
     const fetchTracks = async () => {
       try{
