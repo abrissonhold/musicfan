@@ -62,15 +62,7 @@ function Index() {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [artists, setArtists] = useState<ArtistPeek[]>([]);
   const baseUrl = new URL('https://ws.audioscrobbler.com/2.0/?');
-  const dummyPeek: PeekProps = {
-    imageUrl: "https://cdn.freebiesupply.com/logos/large/2x/for-dummies-1-logo-svg-vector.svg",
-    title: "Dummy Peek",
-    description: "Dummy description"
-  }
-  const dummyPeeks: Array<PeekProps> = [];
-  for(let i = 0; i < 4; i++){
-    dummyPeeks.push(dummyPeek);
-  }
+  const API_KEY = '38c33b10c98373d07e536e89fee77c1e'
   const navItems = [
     "item1",
     "item2",
@@ -88,7 +80,7 @@ function Index() {
       try{
         const topTracksParams = {
           method: 'chart.gettoptracks',
-          api_key: '38c33b10c98373d07e536e89fee77c1e',
+          api_key: API_KEY,
           limit: 4,
           format: 'json'
         };
@@ -99,27 +91,22 @@ function Index() {
         }
         const topTracksResponse: TrackResponse = await response.json();    
         for(const currentTrack of topTracksResponse.tracks.track){
-          try{
-            const trackInfoParams = {
-              method: 'track.getInfo',
-              api_key: '38c33b10c98373d07e536e89fee77c1e',
-              mbid: currentTrack.mbid,
-              format: 'json'
-            }
-            let trackInfoUrl = injectParams(baseUrl, trackInfoParams);            
-            const trackInfo = await fetch(trackInfoUrl);
-            if(!response.ok) throw new Error("Track info retrieval error");
-            const retrievedTrackInfo = await trackInfo.json();
-            currentTrack.image = retrievedTrackInfo?.track?.album?.image[3]['#text'];
+          const trackInfoParams = {
+            method: 'track.getInfo',
+            api_key: API_KEY,
+            mbid: currentTrack.mbid,
+            format: 'json'
           }
-          catch(e){
-            console.error('An error ocurrend retrieven cover art: ', e);
-          }
+          let trackInfoUrl = injectParams(baseUrl, trackInfoParams);            
+          const trackInfo = await fetch(trackInfoUrl);
+          if(!response.ok) throw new Error("Track info retrieval Error");
+          const retrievedTrackInfo = await trackInfo.json();
+          currentTrack.image = retrievedTrackInfo?.track?.album?.image[3]['#text'];
         }        
         setTracks(topTracksResponse.tracks.track);
       }
       catch(e){
-        console.error("Error: ", e);
+        console.error("Error fetching top tracks: ", e);
       }
     }
     fetchTracks();
@@ -130,7 +117,7 @@ function Index() {
       try{
         const topArtistParams = {
           method: 'chart.gettopartists',
-          api_key: '38c33b10c98373d07e536e89fee77c1e',
+          api_key: API_KEY,
           limit: 4,
           format: 'json'
         }
@@ -141,18 +128,17 @@ function Index() {
         for(const currentArtist of topArtistResponse.artists.artist){
           const artistTopAlbumsParams = {
             method: 'artist.gettopalbums',
-            api_key: '38c33b10c98373d07e536e89fee77c1e',
+            api_key: API_KEY,
             mbid: currentArtist.mbid,
             limit: 1,
             format: 'json'
           }
           let artistTopAlbumsUrl = injectParams(baseUrl, artistTopAlbumsParams);
           const responseArtist = await fetch(artistTopAlbumsUrl);
-          if(!responseArtist.ok) throw new Error('Network Error');
+          if(!responseArtist.ok) throw new Error('Artists top albums retrieval Error');
           const artistTopAlbumsResponse = await responseArtist.json();
           currentArtist.image = artistTopAlbumsResponse.topalbums?.album[0]?.image[2]['#text'];
         }
-        console.log(topArtistResponse.artists.artist);
         setArtists(topArtistResponse.artists.artist);
       }
       catch(e){
@@ -162,47 +148,53 @@ function Index() {
     fetchTopArtists();
   }, []);
 
+  const trackGalleryProps = generateTrackGallery(tracks);  
+  const artistGalleryProps = generateArtistGallery(artists);
+  return (
+    <>
+      <div className="index">
+        <Header navItems={navItems}></Header>
+        <CardGallery {...trackGalleryProps}></CardGallery>
+        <PeekGallery {...artistGalleryProps}></PeekGallery>
+        <Footer footerItems={footerItems}></Footer>
+      </div>
+    </>
+  )
+}
+function generateTrackGallery(tracks: Track[]){
   const trackData: CardProps[] = [];
   tracks.forEach((currentTrack) => {
     const track: CardProps = {
       imageUrl: currentTrack.image,
       artistName: currentTrack.artist.name,
       songName: currentTrack.name,
-      listenersAmount: currentTrack.listeners
+      listenersAmount: `Listeners: ${currentTrack.listeners}`
     }
     trackData.push(track);
   })
-  const cardGalleryProps: CardGalleryProps = {
+  const trackGalleryProps: CardGalleryProps = {
     cardPropsArray: trackData,
     galleryTitle: "Dummy Gallery",
     gallerySubtitle: "Dummy Gallery Subtitle"
   }
-  
+  return trackGalleryProps;
+}
+function generateArtistGallery(artists: ArtistPeek[]){
   const peekData: PeekProps[] = [];
   artists.forEach((currentArtist) => {
     const artist: PeekProps = {
       imageUrl: currentArtist.image,
       title: currentArtist.name,
-      description: currentArtist.listeners
+      description: `Listeners: ${currentArtist.listeners}`
     }
     peekData.push(artist);
   })
-  const peekGalleryProps: PeekGalleryProps = {
+  const artistGalleryProps: PeekGalleryProps = {
     peekPropsArray: peekData,
     upperSubtitle: 'Top Artists',
     title: "Artists",
     lowerSubtitle: "Top Artists"
   }
-  return (
-    <>
-      <div className="index">
-        <Header navItems={navItems}></Header>
-        <CardGallery {...cardGalleryProps}></CardGallery>
-        <PeekGallery {...peekGalleryProps}></PeekGallery>
-        <Footer footerItems={footerItems}></Footer>
-      </div>
-    </>
-  )
+  return artistGalleryProps;
 }
-
 export default Index
