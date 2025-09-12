@@ -66,9 +66,10 @@ function Index() {
   const API_KEY = '38c33b10c98373d07e536e89fee77c1e'
   const navItems = [
     "Exitos",
-    "Tus Favs",
-    "Contactanos"
+    "Tus favoritos",
+    "Artistas destacados"
   ] 
+
   useEffect(() => {
     const fetchTracks = async () => {
       try{
