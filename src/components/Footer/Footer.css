@@ -1,5 +1,4 @@
 .footer-container {
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,14 +7,12 @@
 }
 
 .footer-max-width {
-    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 24px;
 }
 
 .footer-content {
-    width: 100vw;
     display: flex;
     flex-direction: row;
     gap: 64px;
@@ -25,7 +22,6 @@
 
 .footer-links a{
     gap: 32px;
-    width: 100%;
     display: flex;
     flex-grow: 1;
     align-items: flex-start;
@@ -38,7 +34,6 @@
     display: flex;
     overflow: hidden;
     flex-grow: 1;
-    max-width: 300px;
     flex-shrink: 0;
     flex-direction: column;
 }

@@ -65,24 +65,17 @@ function Index() {
   const baseUrl = new URL('https://ws.audioscrobbler.com/2.0/?');
   const API_KEY = '38c33b10c98373d07e536e89fee77c1e'
   const navItems = [
-    "item1",
-    "item2",
-    "item3"
+    "Exitos",
+    "Tus Favs",
+    "Contactanos"
   ] 
-  const footerItems = [
-    "item1",
-    "item2",
-    "item3",
-    "item4",
-    "item5",
-  ]
   useEffect(() => {
     const fetchTracks = async () => {
       try{
         const topTracksParams = {
           method: 'chart.gettoptracks',
           api_key: API_KEY,
-          limit: 4,
+          limit: 5,
           format: 'json'
         };
         let topTracksUrl = injectParams(baseUrl, topTracksParams);
@@ -102,8 +95,10 @@ function Index() {
           const trackInfo = await fetch(trackInfoUrl);
           if(!response.ok) throw new Error("Track info retrieval Error");
           const retrievedTrackInfo = await trackInfo.json();
-          currentTrack.image = retrievedTrackInfo?.track?.album?.image[3]['#text'];
-        }        
+          currentTrack.image = retrievedTrackInfo?.track?.album?.image[3]['#text'] ? 
+          retrievedTrackInfo?.track?.album?.image[3]['#text'] :
+          'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
+        }                
         setTracks(topTracksResponse.tracks.track);
       }
       catch(e){
@@ -193,8 +188,8 @@ function generateArtistGallery(artists: ArtistPeek[]){
   const artistGalleryProps: PeekGalleryProps = {
     peekPropsArray: peekData,
     upperSubtitle: 'Estos son los artistas más populares',
-    title: "Artistas",
-    lowerSubtitle: "Top 4 Artistas"
+    title: "Descubrí los mejores artistas",
+    lowerSubtitle: "Conoce a quienes están en tendencia, te invitamos a leer un poco mas de tus futuros artistas favoritos"
   }
   return artistGalleryProps;
 }
