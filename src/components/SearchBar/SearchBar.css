@@ -1,0 +1,20 @@
+.search-bar{
+    display: flex;
+    align-items: center;
+    width: 20vw;
+    height: 3vh;
+    background: var(--dl-color-theme-neutral-light);
+    border-radius: 999px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.08);
+    padding-left: 1rem;
+    /* transition: box-shadow .12s ease, border-color .12s ease; */
+}
+/* .search-bar-form:focus-within{
+    border-color: red;
+} */
+.search-bar:focus{
+    /* outline: none; */
+    /* border-color: red; */
+}

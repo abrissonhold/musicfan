@@ -1,0 +1,8 @@
+.gridded-content{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0vw;
+}
+.main-content{
+    max-width: 80vw;
+}

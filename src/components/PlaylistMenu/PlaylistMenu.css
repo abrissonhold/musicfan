@@ -1,0 +1,15 @@
+.playlist-menu {
+    width: 20vw;
+    min-height: 100vh;
+    background-color: #050625;
+    border-radius: 0.5rem;
+}
+.create-playlist{
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    width: 16vw;
+    padding: 0.25rem;
+    margin: 2rem 2rem 2rem 2rem;
+    border-radius: 1rem;
+}

@@ -1,0 +1,18 @@
+.card-search-gallery {
+    padding: 1rem;
+    background-color: var(--dl-color-theme-neutral-light);
+    color: var(--dl-color-gray-white);
+    margin-right: 2rem;
+}
+.card-search-gallery-header-title {
+    font-size: 2rem;
+    font-family: "Inter";
+    color: var(--dl-color-gray-white);
+}
+
+.card-search-gallery-body {
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;   
+}

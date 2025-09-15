@@ -68,7 +68,7 @@ function Index() {
     "Exitos",
     "Tus favoritos",
     "Artistas destacados"
-  ] 
+  ];
 
   useEffect(() => {
     const fetchTracks = async () => {
