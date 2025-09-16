@@ -19,3 +19,4 @@ function Tracklist({trackItemProps, title}: TrackListProps){
     )
 }
 export {Tracklist};
+export type {TrackListProps};

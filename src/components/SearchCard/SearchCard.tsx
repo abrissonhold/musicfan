@@ -1,9 +1,9 @@
 import "./SearchCard.css"
 interface SearchCardProps{
     imageUrl: string;
-    artistName: string;
+    artistName: string | undefined | null;
     songName: string;
-    listenersAmount: string;
+    listenersAmount: string | undefined | null;
 }
 function SearchCard({imageUrl, artistName, songName, listenersAmount}: SearchCardProps) {
 

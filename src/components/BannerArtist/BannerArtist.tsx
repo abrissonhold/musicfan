@@ -1,16 +1,16 @@
 import "./BannerArtist.css"
 interface BannerArtistProps{
     imageUrl: string;
-    title: string;
+    name: string;
     listeners: string;
 }
-function BannerArtist({imageUrl, title, listeners}: BannerArtistProps){
+function BannerArtist({imageUrl, name, listeners}: BannerArtistProps){
     return (
         <>
-            <section className="Banner-artist" style={{backgroundImage: imageUrl ? `url(${imageUrl})` : "none"}}>
-                <h1 className="Banner-artist-title">{title}</h1>
-                <div className="Banner-artist-body">
-                    <p className="Banner-artist-body-listeners">{listeners}</p>
+            <section className="banner-artist" style={{backgroundImage: imageUrl ? `url(${imageUrl})` : "none"}}>
+                <h1 className="banner-artist-name">{name}</h1>
+                <div className="banner-artist-body">
+                    <p className="banner-artist-body-listeners">{listeners}</p>
                 </div>
             </section>
         </>

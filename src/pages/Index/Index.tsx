@@ -62,12 +62,7 @@ function Index() {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [artists, setArtists] = useState<ArtistPeek[]>([]);
   const baseUrl = new URL('https://ws.audioscrobbler.com/2.0/?');
-  const API_KEY = '38c33b10c98373d07e536e89fee77c1e'
-  const navItems = [
-    "Exitos",
-    "Tus favoritos",
-    "Artistas destacados"
-  ];
+  const API_KEY = '38c33b10c98373d07e536e89fee77c1e';  
 
   useEffect(() => {
     const fetchTracks = async () => {
@@ -149,7 +144,7 @@ function Index() {
   return (
     <>
       <div className="index">
-        <Header navItems={navItems}></Header>
+        <Header></Header>
         <CardGallery {...trackGalleryProps}></CardGallery>
         <PeekGallery {...artistGalleryProps}></PeekGallery>
         <Footer></Footer>

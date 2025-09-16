@@ -1,12 +1,7 @@
 import "./Header.css"
 import SearchBar from "../SearchBar/SearchBar";
-interface HeaderProps{
-    navItems: Array<string>;
-}
-import { useNavigate } from 'react-router-dom';
-function Header({navItems}: HeaderProps) {
+function Header() {
 
-    const navigate = useNavigate();    
   return (
     <>
         <header className="header">
@@ -14,10 +9,13 @@ function Header({navItems}: HeaderProps) {
                 <img alt="Company Logo" src="src\assets\logoWhite.png" loading="lazy" className="navbar-image1" />
                 <SearchBar></SearchBar>
                 <ul className="header-nav-list">
-                    { navItems.map((item: string, index: number) => 
+                    <li className="header-nav-list-item">Exitos</li>
+                    <li className="header-nav-list-item">Tus favoritos</li>
+                    <li className="header-nav-list-item">Artistas destacados</li>
+                    {/* { navItems.map((item: string, index: number) => 
                     <li className="header-nav-list-item" key={index}>
                         {item}
-                    </li>)}              
+                    </li>)}               */}
                 </ul>
             </nav>
         </header>
@@ -26,4 +24,3 @@ function Header({navItems}: HeaderProps) {
 }
 
 export { Header };
-export type { HeaderProps };

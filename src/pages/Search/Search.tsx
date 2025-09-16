@@ -101,18 +101,13 @@ function Search() {
         fetchAlbums();
     }, [query]);
 
-    const navItems = [
-        "Exitos",
-        "Tus favoritos",
-        "Artistas destacados"
-    ];
     const tracksGalleryProps= getTracks(tracks);
     const albumGaleryProps = getAlbums(albums);
     console.log(query);
     return (
         <>
             <div className="search">
-                <Header navItems={navItems}></Header>
+                <Header></Header>
                 <div className="gridded-content">
                     <PlaylistMenu></PlaylistMenu>
                     <div className="main-content">
