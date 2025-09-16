@@ -162,7 +162,7 @@ function ArtistDetails() {
     if (artist) {
         const bannerArtistProps = getBannerArtistProps(artist);
         const tracklistProps = getTracklistProps(topTracks);
-        const similarArtistProps = getSimilarGalleryPropsO(similarArtists);
+        const similarArtistProps = getSimilarGalleryProps(similarArtists);
         return (
             <>
                 <Header></Header>
@@ -202,7 +202,7 @@ function getTracklistProps(topTracks: Array<Track>) {
     };
     return tracklistProps;
 }
-function getSimilarGalleryPropsO(similarArtist: SimilarArtist[]){
+function getSimilarGalleryProps(similarArtist: SimilarArtist[]){
     const searchCardProps = similarArtist.map((currentArtist: SimilarArtist) => {
         const searchCardProp: SearchCardProps = {
             imageUrl: currentArtist.image,
