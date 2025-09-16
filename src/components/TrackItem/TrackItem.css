@@ -110,7 +110,7 @@
 }
 
 .track-item:nth-child(1) .track-item-index {
-    color: var(--dl-color-success-300);
+    color: var(--dl-color-success-700);
     font-weight: 700;
 }
 
@@ -120,23 +120,8 @@
 }
 
 .track-item:nth-child(3) .track-item-index {
-    color:  var(--dl-color-success-700);
+    color:  var(--dl-color-success-300);
     font-weight: 700;
-}
-
-.track-item:nth-child(-n+3)::after {
-    content: '';
-    position: absolute;
-    right: var(--dl-layout-space-halfunit);
-    top: 50%;
-    transform: translateY(-50%);
-    width: 6px;
-    height: 6px;
-    background: var(--dl-gradient-primary);
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 3;
 }
 
 .track-item:nth-child(-n+3):hover::after {

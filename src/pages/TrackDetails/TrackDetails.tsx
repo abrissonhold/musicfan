@@ -4,10 +4,11 @@ import { Footer } from "../../components/Footer/Footer";
 import { BasicBanner, type BasicBannerProps } from "../../components/BasicBanner/BasicBanner";
 import { SimilarGallery, type SimilarGalleryProps } from "../../components/SimilarGallery/SimilarGallery";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { baseUrl, API_KEY } from "../../helpers/constants";
 import { injectParams } from "../../helpers/helper";
 import type { SearchCardProps } from "../../components/SearchCard/SearchCard";
+
 interface Track {
     artist: Artist;
     listeners: string;
@@ -16,38 +17,62 @@ interface Track {
     album: Album;
     wiki: Wiki;
 }
+
 interface Artist {
     mbid: string;
     name: string;
 }
+
 interface Album {
     image: Image[];
     artist: string;
     title: string;
+    mbid?: string; // Add optional album mbid
 }
+
 interface Image {
     size: string;
     '#text': string;
 }
+
 interface Wiki {
     content: string;
     published: string;
     summary: string;
 }
+
 interface SimilarTrack {
     artist: Artist;
     name: string;
     image: string;
     playcount: string;
+    mbid: string;
 }
-function TrackDetails(){
+
+function TrackDetails() {
     const [track, setTrack] = useState<Track>();
-    const [similarTracks, setSimilarTracks] = useState();
+    const [similarTracks, setSimilarTracks] = useState<SimilarTrack[]>([]);
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+
     const query = searchParams.get("q");
+
+    // Navigation functions
+    const navigateToTrack = (mbid: string) => {
+        navigate(`/track?q=${mbid}`);
+    };
+
+    const navigateToArtist = (artistMbid: string) => {
+        navigate(`/artist?q=${artistMbid}`);
+    };
+
+    const navigateToAlbum = (albumMbid: string) => {
+        navigate(`/album?q=${albumMbid}`);
+    };
+
     useEffect(() => {
         const fetchTrack = async () => {
-            try{
+            try {
                 const trackParams = {
                     method: 'track.getInfo',
                     api_key: API_KEY,
@@ -56,21 +81,54 @@ function TrackDetails(){
                 };
                 const trackUrl = injectParams(baseUrl, trackParams);
                 const response = await fetch(trackUrl);
-                if(!response.ok) throw new Error('Network Error');
+                if (!response.ok) throw new Error('Network Error');
                 const parsedResponse = await response.json();
-                const track = parsedResponse.track;
-                setTrack(track)
+                const trackData = parsedResponse.track;
+                
+                // Try to find album mbid by searching for the album
+                if (trackData?.album?.title && trackData?.album?.artist) {
+                    try {
+                        const albumSearchParams = {
+                            method: 'album.search',
+                            api_key: API_KEY,
+                            format: 'json',
+                            album: trackData.album.title,
+                            limit: 10
+                        };
+                        const albumSearchUrl = injectParams(baseUrl, albumSearchParams);
+                        const albumSearchResponse = await fetch(albumSearchUrl);
+                        
+                        if (albumSearchResponse.ok) {
+                            const albumSearchData = await albumSearchResponse.json();
+                            const albums = albumSearchData?.results?.albummatches?.album || [];
+                            
+                            // Find the album that matches the artist
+                            const matchingAlbum = albums.find((album: any) => 
+                                album.artist.toLowerCase() === trackData.album.artist.toLowerCase()
+                            );
+                            
+                            if (matchingAlbum?.mbid) {
+                                trackData.album.mbid = matchingAlbum.mbid;
+                            }
+                        }
+                    } catch (e) {
+                        console.warn(`Could not find mbid for album: ${trackData.album.title}`, e);
+                    }
+                }
+                
+                setTrack(trackData);
             }
-            catch(e){
+            catch (e) {
                 console.error("Fetching Error: ", e);
             }
         }
         fetchTrack();
-    }, [query])
+    }, [query]);
+
     useEffect(() => {
         const fetchSimilarTracks = async () => {
-            try{
-                if(track){
+            try {
+                if (track) {
                     const similarTracksParams = {
                         method: 'track.getsimilar',
                         api_key: API_KEY,
@@ -80,10 +138,11 @@ function TrackDetails(){
                     };
                     const similarTracksUrl = injectParams(baseUrl, similarTracksParams);
                     const response = await fetch(similarTracksUrl);
-                    if(!response.ok) throw new Error('Network Error');
+                    if (!response.ok) throw new Error('Network Error');
                     const parsedResponse = await response.json();
                     const similarTracks = parsedResponse.similartracks.track;
-                    for(const currentTrack of similarTracks){
+                    
+                    for (const currentTrack of similarTracks) {
                         const trackParams = {
                             method: 'track.getInfo',
                             api_key: API_KEY,
@@ -92,60 +151,111 @@ function TrackDetails(){
                         };
                         const trackUrl = injectParams(baseUrl, trackParams);
                         const response = await fetch(trackUrl);
-                        if(!response.ok) throw new Error('Network Error');
+                        if (!response.ok) throw new Error('Network Error');
                         const parsedResponse = await response.json();
-                        currentTrack.image = parsedResponse?.track?.album?.image[3]['#text'] ? 
-                        parsedResponse?.track?.album?.image[3]['#text'] :
-                        'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
+                        currentTrack.image = parsedResponse?.track?.album?.image[3]['#text'] ?
+                            parsedResponse?.track?.album?.image[3]['#text'] :
+                            'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
                     }
                     setSimilarTracks(similarTracks);
-                }                
+                }
             }
-            catch(e){
+            catch (e) {
                 console.error('Fetching Error: ', e);
             }
         }
         fetchSimilarTracks();
     }, [track]);
-    if(track && similarTracks){
-        const basicBannerProps = getBasicBannerProps(track);
-        const similarGalleryProps = getSimilarGalleryProps(similarTracks);
+
+    if (track && similarTracks.length >= 0) { 
+        const navigateToArtistHandler = track.artist.mbid 
+            ? () => navigateToArtist(track.artist.mbid)
+            : undefined;
+
+        const navigateToAlbumHandler = track.album?.mbid && typeof track.album.mbid === "string"
+            ? () => navigateToAlbum(track.album!.mbid as string)
+            : undefined;
+
+        const basicBannerProps = getBasicBannerProps(track, navigateToArtistHandler);
+        const similarGalleryProps = getSimilarGalleryProps(similarTracks, navigateToTrack);
+                const trackWikiContent = track.wiki?.content
+            ? track.wiki.content
+            : track.album?.title
+                ? `Pertenece al álbum "${track.album.title}"`
+                : "No hay una descripción disponible.";
+
         return (
             <>
                 <Header></Header>
                 <BasicBanner {...basicBannerProps}></BasicBanner>
                 <section className="track-description">
-                    <p className="track-description-text">{track.wiki.content}</p>
+                    <p className="track-description-text">
+                        {track.wiki?.content ? (
+                            trackWikiContent
+                        ) : track.album?.title ? (
+                            <>
+                                Pertenece al álbum{' '}
+                                {navigateToAlbumHandler ? (
+                                    <span 
+                                        className="track-description-album-link"
+                                        onClick={navigateToAlbumHandler}
+                                        title={`Ver álbum ${track.album.title}`}
+                                    >
+                                        "{track.album.title}"
+                                    </span>
+                                ) : (
+                                    `"${track.album.title}"`
+                                )}
+                            </>
+                        ) : (
+                            "No hay una descripción disponible."
+                        )}
+                    </p>
                 </section>
-                <SimilarGallery {...similarGalleryProps}></SimilarGallery>
+                {similarTracks.length > 0 && (
+                    <SimilarGallery {...similarGalleryProps}></SimilarGallery>
+                )}
                 <Footer></Footer>
             </>
         )
     }
 }
-function getBasicBannerProps(track: Track){
+
+function getBasicBannerProps(track: Track, onArtistClick?: () => void) {
     const basicBannerProps: BasicBannerProps = {
         imageUrl: track.album.image[3]['#text'] ? track.album.image[3]['#text'] : 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png',
         artist: track.artist.name,
         name: track.name,
-        listeners: track.listeners
+        listeners: track.listeners,
+        onArtistClick: onArtistClick
     };
     return basicBannerProps;
 }
-function getSimilarGalleryProps(similarTracks: SimilarTrack[]){
+
+function getSimilarGalleryProps(similarTracks: SimilarTrack[], navigate: (mbid: string) => void) {
     const searchCardProps = similarTracks.map((currentTrack: SimilarTrack) => {
         const searchCardProp: SearchCardProps = {
+            type: "track",
             imageUrl: currentTrack.image,
-            artistName: currentTrack.artist.name,
-            songName: currentTrack.name,
-            listenersAmount: currentTrack.playcount
+            title: currentTrack.name,
+            subtitle: currentTrack.artist.name,
+            listenersAmount: currentTrack.playcount,
+            onClick: () => {
+                if (currentTrack.mbid && currentTrack.mbid.trim() !== '') {
+                    navigate(currentTrack.mbid);
+                } else {
+                    console.warn('No valid MBID for track:', currentTrack.name);
+                }
+            }
         }
         return searchCardProp;
-    })
+    });
+
     const similarGalleryProps: SimilarGalleryProps = {
         similarCardProps: searchCardProps,
-        title: "Artistas Similares"
+        title: "Canciones Similares"
     }
     return similarGalleryProps;
 }
+
 export { TrackDetails };

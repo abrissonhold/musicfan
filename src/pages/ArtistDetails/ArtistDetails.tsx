@@ -7,9 +7,10 @@ import { SimilarGallery, type SimilarGalleryProps } from "../../components/Simil
 import { useEffect, useState } from "react";
 import { baseUrl, API_KEY } from "../../helpers/constants";
 import { injectParams } from "../../helpers/helper";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import type { TrackItemProps } from "../../components/TrackItem/TrackItem";
 import type { SearchCardProps } from "../../components/SearchCard/SearchCard";
+
 interface ArtistResponse {
     name: string;
     image: string;
@@ -18,34 +19,53 @@ interface ArtistResponse {
     mbid: string;
     bio: Bio;
 }
+
 interface Stats {
     listeners: string
     playcount: string;
 }
+
 interface Tag {
     name: string;
     url: string;
 }
+
 interface Bio {
     content: string;
     published: string;
     summary: string;
 }
+
 interface Track {
     name: string;
     image: string;
     listeners: string;
+    mbid: string; // Add mbid for tracks
 }
+
 interface SimilarArtist {
     image: string;
     name: string;
+    mbid: string; // Add mbid for similar artists
 }
+
 function ArtistDetails() {
     const [artist, setArtist] = useState<ArtistResponse>();
     const [topTracks, setTopTracks] = useState<Track[]>([]);
     const [similarArtists, setSimilarArtists] = useState<SimilarArtist[]>([]);
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
     const query = searchParams.get("q");
+
+    // Navigation functions
+    const navigateToTrack = (mbid: string) => {
+        navigate(`/track?q=${mbid}`);
+    };
+
+    const navigateToArtist = (mbid: string) => {
+        navigate(`/artist?q=${mbid}`);
+    };
+
     useEffect(() => {
         const fetchArtist = async () => {
             try {
@@ -80,6 +100,7 @@ function ArtistDetails() {
         }
         fetchArtist();
     }, [query]);
+
     useEffect(() => {
         const fetchTopTracks = async () => {
             try {
@@ -105,7 +126,7 @@ function ArtistDetails() {
                         }
                         let trackInfoUrl = injectParams(baseUrl, trackInfoParams);
                         const trackInfo = await fetch(trackInfoUrl);
-                        if (!response.ok) throw new Error("Track info retrieval Error");
+                        if (!trackInfo.ok) throw new Error("Track info retrieval Error"); // Fix: use trackInfo response
                         const retrievedTrackInfo = await trackInfo.json();
                         currentTrack.image = retrievedTrackInfo?.track?.album?.image[3]['#text'] ?
                             retrievedTrackInfo?.track?.album?.image[3]['#text'] :
@@ -120,10 +141,11 @@ function ArtistDetails() {
         }
         fetchTopTracks();
     }, [artist]);
+
     useEffect(() => {
         const fetchSimilarArtist = async () => {
-            try{
-                if(artist){
+            try {
+                if (artist) {
                     const similarArtistParams = {
                         method: 'artist.getsimilar',
                         api_key: API_KEY,
@@ -133,14 +155,14 @@ function ArtistDetails() {
                     };
                     const similarArtistUrl = injectParams(baseUrl, similarArtistParams);
                     const response = await fetch(similarArtistUrl);
-                    if(!response.ok) throw new Error('Network Error');
+                    if (!response.ok) throw new Error('Network Error');
                     const parsedResponse = await response.json();
                     const similarArtists = parsedResponse.similarartists.artist;
-                    for(const artist of similarArtists){
+                    for (const currentArtist of similarArtists) { // Changed variable name to avoid confusion
                         const artistTopAlbumsParams = {
                             method: 'artist.gettopalbums',
                             api_key: API_KEY,
-                            mbid: artist.mbid,
+                            mbid: currentArtist.mbid,
                             limit: 1,
                             format: 'json'
                         }
@@ -148,21 +170,23 @@ function ArtistDetails() {
                         const responseArtist = await fetch(artistTopAlbumsUrl);
                         if (!responseArtist.ok) throw new Error('Artists top albums retrieval Error');
                         const artistTopAlbumsResponse = await responseArtist.json();
-                        artist.image = artistTopAlbumsResponse.topalbums?.album[0]?.image[2]['#text'];
+                        currentArtist.image = artistTopAlbumsResponse.topalbums?.album[0]?.image[2]['#text'];
                     }
                     setSimilarArtists(similarArtists);
                 }
             }
-            catch(e){
+            catch (e) {
                 console.error('Fetching Error: ', e);
             }
         }
         fetchSimilarArtist();
     }, [artist]);
+
     if (artist) {
         const bannerArtistProps = getBannerArtistProps(artist);
-        const tracklistProps = getTracklistProps(topTracks);
-        const similarArtistProps = getSimilarGalleryProps(similarArtists);
+        const tracklistProps = getTracklistProps(topTracks, navigateToTrack);
+        const similarArtistProps = getSimilarGalleryProps(similarArtists, navigateToArtist);
+
         return (
             <>
                 <Header></Header>
@@ -176,8 +200,8 @@ function ArtistDetails() {
             </>
         )
     }
-
 }
+
 function getBannerArtistProps(artistInfo: ArtistResponse) {
     const bannerArtistProps: BannerArtistProps = {
         imageUrl: artistInfo.image,
@@ -186,36 +210,56 @@ function getBannerArtistProps(artistInfo: ArtistResponse) {
     }
     return bannerArtistProps;
 }
-function getTracklistProps(topTracks: Array<Track>) {
+
+function getTracklistProps(topTracks: Array<Track>, navigate: (mbid: string) => void) {
     const trackItemProps: Array<TrackItemProps> = topTracks.map((currentTrack: Track, index: number) => {
         const currentTrackItemProp: TrackItemProps = {
             index: index + 1,
             imageUrl: currentTrack.image,
             name: currentTrack.name,
-            listeners: currentTrack.listeners
+            listeners: currentTrack.listeners,
+            onClick: () => {
+                if (currentTrack.mbid && currentTrack.mbid.trim() !== '') {
+                    navigate(currentTrack.mbid);
+                } else {
+                    console.warn('No valid MBID for track:', currentTrack.name);
+                }
+            }
         }
         return currentTrackItemProp;
     })
+
     const tracklistProps: TrackListProps = {
         trackItemProps: trackItemProps,
         title: "Mejores canciones"
     };
     return tracklistProps;
 }
-function getSimilarGalleryProps(similarArtist: SimilarArtist[]){
+
+function getSimilarGalleryProps(similarArtist: SimilarArtist[], navigate: (mbid: string) => void) {
     const searchCardProps = similarArtist.map((currentArtist: SimilarArtist) => {
         const searchCardProp: SearchCardProps = {
+            type: "artist",
             imageUrl: currentArtist.image,
-            artistName: undefined,
-            songName: currentArtist.name,
-            listenersAmount: undefined
+            title: currentArtist.name,
+            subtitle: undefined,
+            listenersAmount: undefined,
+            onClick: () => {
+                if (currentArtist.mbid && currentArtist.mbid.trim() !== '') {
+                    navigate(currentArtist.mbid);
+                } else {
+                    console.warn('No valid MBID for artist:', currentArtist.name);
+                }
+            }
         }
         return searchCardProp;
     })
+
     const similarGalleryProps: SimilarGalleryProps = {
         similarCardProps: searchCardProps,
         title: "Artistas Similares"
     }
     return similarGalleryProps;
 }
+
 export { ArtistDetails };
