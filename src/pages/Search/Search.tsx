@@ -22,12 +22,19 @@ interface Album {
     mbid: string;
     streamable: string;
 }
+interface Artist {
+    image: string;
+    mbid: string;
+    name: string;
+    listeners: string;
+}
 
 function Search() {
     const API_KEY = '38c33b10c98373d07e536e89fee77c1e'
     const baseUrl = new URL('https://ws.audioscrobbler.com/2.0/?');
     const [tracks, setTracks] = useState<Track[]>([]);
     const [albums, setAlbums] = useState<Album[]>([]);
+    const [artists, setArtists] = useState<Artist[]>([]);
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q");
     useEffect(() => {
@@ -45,7 +52,6 @@ function Search() {
                 if(!response.ok) throw new Error("Network error");
                 const searchResponse = await response.json();
                 const trackMatches = searchResponse.results.trackmatches.track;
-                console.log(trackMatches);
                 for(const currentTrack of trackMatches){
                     const trackInfoParams = {
                         method: 'track.getInfo',
@@ -84,9 +90,7 @@ function Search() {
                 const response = await fetch(searchUrl);
                 if(!response.ok) throw new Error("Network error");
                 const searchResponse = await response.json();
-                console.log(searchResponse);
                 const albumMatches = searchResponse.results.albummatches.album;
-                console.log(albumMatches);
                 for(const currentTrack of albumMatches){                    
                     currentTrack.image = currentTrack.image[2]['#text'] ? 
                     currentTrack.image[2]['#text'] :
@@ -101,9 +105,49 @@ function Search() {
         fetchAlbums();
     }, [query]);
 
+    useEffect(() => {
+        const fetchArtist = async () => {
+            try{
+                const artistSearchParams = {
+                    method: 'artist.search',
+                    api_key: API_KEY,
+                    artist: query,
+                    format: 'json',
+                    limit: 5,
+                }
+                const artistSearchUrl = injectParams(baseUrl, artistSearchParams);
+                const response = await fetch(artistSearchUrl);
+                if(!response.ok) throw new Error("Network Error");
+                const parsedResponse = await response.json();
+                const artists = parsedResponse.results.artistmatches.artist;
+                for(const currentArtist of artists){
+                    const artistTopAlbumsParams = {
+                        method: 'artist.gettopalbums',
+                        api_key: API_KEY,
+                        mbid: currentArtist.mbid,
+                        limit: 1,
+                        format: 'json'
+                    }
+                    let artistTopAlbumsUrl = injectParams(baseUrl, artistTopAlbumsParams);
+                    const responseArtist = await fetch(artistTopAlbumsUrl);
+                    if(!responseArtist.ok) throw new Error('Artists top albums retrieval Error');
+                    const artistTopAlbumsResponse = await responseArtist.json();
+                    currentArtist.image = artistTopAlbumsResponse.topalbums?.album[0]?.image[2]['#text'] ? 
+                    artistTopAlbumsResponse.topalbums?.album[0]?.image[2]['#text'] : 
+                    'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
+                }
+                setArtists(artists);
+            }
+            catch(e){
+                console.error("Fetching Error: ", e);
+            }
+        }
+        fetchArtist();
+    }, [query]);
+
     const tracksGalleryProps= getTracks(tracks);
     const albumGaleryProps = getAlbums(albums);
-    console.log(query);
+    const artistGalleryProps = getArtistsProps(artists);
     return (
         <>
             <div className="search">
@@ -113,6 +157,7 @@ function Search() {
                     <div className="main-content">
                         <SearchCardGallery {...tracksGalleryProps}></SearchCardGallery>
                         <SearchCardGallery {...albumGaleryProps}></SearchCardGallery>
+                        <SearchCardGallery {...artistGalleryProps}></SearchCardGallery>
                     </div>
                 </div>                
             </div>
@@ -153,6 +198,23 @@ function getAlbums(albums: Album[]){
         galleryTitle: "Albums"
     };
     return albumGalleryProps;
+}
+function getArtistsProps(artists: Artist[]){
+    const artistCards: SearchCardProps[] = [];
+    artists.forEach((currentArtist: Artist) => {
+        const artistCard: SearchCardProps = {
+            imageUrl: currentArtist.image,
+            artistName: currentArtist.name,
+            songName: '',
+            listenersAmount: `Listeners: ${currentArtist.listeners}`
+        }
+        artistCards.push(artistCard);
+    })
+    const artistGalleryProps: SearchGalleryProps = {
+        searchCardPropsArray: artistCards,
+        galleryTitle: "Artistas"
+    };
+    return artistGalleryProps;
 }
 
 function injectParams(baseUrl: URL, params: Object){
