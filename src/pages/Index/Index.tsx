@@ -4,7 +4,6 @@ import type { PeekProps } from "../../components/Peek/Peek"
 import { Header } from "../../components/Header/Header"
 import { CardGallery, type CardGalleryProps } from "../../components/CardGallery/CardGallery"
 import { PeekGallery ,type PeekGalleryProps } from "../../components/PeekGallery/PeekGallery"
-import { Peek } from "../../components/Peek/Peek"
 import { Footer } from "../../components/Footer/Footer"
 import { useEffect, useState } from "react"
 
