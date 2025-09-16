@@ -27,7 +27,7 @@ interface Album {
     image: Image[];
     artist: string;
     title: string;
-    mbid?: string; // Add optional album mbid
+    mbid?: string; 
 }
 
 interface Image {
@@ -57,7 +57,6 @@ function TrackDetails() {
 
     const query = searchParams.get("q");
 
-    // Navigation functions
     const navigateToTrack = (mbid: string) => {
         navigate(`/track?q=${mbid}`);
     };
@@ -85,7 +84,6 @@ function TrackDetails() {
                 const parsedResponse = await response.json();
                 const trackData = parsedResponse.track;
                 
-                // Try to find album mbid by searching for the album
                 if (trackData?.album?.title && trackData?.album?.artist) {
                     try {
                         const albumSearchParams = {
@@ -102,7 +100,6 @@ function TrackDetails() {
                             const albumSearchData = await albumSearchResponse.json();
                             const albums = albumSearchData?.results?.albummatches?.album || [];
                             
-                            // Find the album that matches the artist
                             const matchingAlbum = albums.find((album: any) => 
                                 album.artist.toLowerCase() === trackData.album.artist.toLowerCase()
                             );

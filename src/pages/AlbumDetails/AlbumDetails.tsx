@@ -135,7 +135,10 @@ function AlbumDetails() {
     }, [query]);
 
     if (album) {
-        const basicBannerProps = getBasicBannerProps(album);
+        const navigateToArtistHandler = album.artistMbid !== undefined
+            ? () => navigateToArtist(album.artistMbid as string)
+            : undefined;
+        const basicBannerProps = getBasicBannerProps(album, navigateToArtistHandler);
         const tracklistProps = getTracklistProps(album, navigateToTrack);
         
         return (
