@@ -5,7 +5,7 @@ import { PlaylistMenu } from "../../components/PlaylistMenu/PlaylistMenu";
 import type { SearchCardProps } from "../../components/SearchCard/SearchCard";
 import { SearchCardGallery, type SearchGalleryProps } from "../../components/SearchCardGallery/SearchCardGallery";
 import "./Search.css"
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 interface Track {
     name: string;
@@ -36,7 +36,13 @@ function Search() {
     const [albums, setAlbums] = useState<Album[]>([]);
     const [artists, setArtists] = useState<Artist[]>([]);
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
     const query = searchParams.get("q");
+
+    const navigateToArtist = (mbid: string) => {
+        navigate(`/artist?q=${mbid}`);
+    };
+
     useEffect(() => {
         const fetchTracks = async () => {
             try{
@@ -147,7 +153,8 @@ function Search() {
 
     const tracksGalleryProps= getTracks(tracks);
     const albumGaleryProps = getAlbums(albums);
-    const artistGalleryProps = getArtistsProps(artists);
+    const artistGalleryProps = getArtistsProps(artists, navigateToArtist);
+    
     return (
         <>
             <div className="search">
@@ -164,7 +171,9 @@ function Search() {
         </>
     )
 }
+
 export { Search }
+
 function getTracks(tracks: Track[]){
     const trackData: SearchCardProps[] = [];
     tracks.forEach((currentTrack) => {
@@ -172,7 +181,8 @@ function getTracks(tracks: Track[]){
             imageUrl: currentTrack.image,
             artistName: currentTrack.artist,
             songName: currentTrack.name,
-            listenersAmount: currentTrack.listeners
+            listenersAmount: currentTrack.listeners,
+            onClick: undefined 
         }
         trackData.push(track);
     })
@@ -182,6 +192,7 @@ function getTracks(tracks: Track[]){
     };
     return trackGalleryProps;
 }
+
 function getAlbums(albums: Album[]){
     const albumData: SearchCardProps[] = [];
     albums.forEach((currentAlbum) => {
@@ -189,7 +200,8 @@ function getAlbums(albums: Album[]){
             imageUrl: currentAlbum.image,
             artistName: currentAlbum.artist,
             songName: currentAlbum.name,
-            listenersAmount: ""
+            listenersAmount: "",
+            onClick: undefined 
         }
         albumData.push(album);
     })
@@ -199,17 +211,19 @@ function getAlbums(albums: Album[]){
     };
     return albumGalleryProps;
 }
-function getArtistsProps(artists: Artist[]){
+
+function getArtistsProps(artists: Artist[], navigateToArtist: (mbid: string) => void){
     const artistCards: SearchCardProps[] = [];
     artists.forEach((currentArtist: Artist) => {
         const artistCard: SearchCardProps = {
             imageUrl: currentArtist.image,
             artistName: currentArtist.name,
             songName: '',
-            listenersAmount: `Listeners: ${currentArtist.listeners}`
+            listenersAmount: `Listeners: ${currentArtist.listeners}`,
+            onClick: () => navigateToArtist(currentArtist.mbid)
         }
         artistCards.push(artistCard);
-    })
+    });
     const artistGalleryProps: SearchGalleryProps = {
         searchCardPropsArray: artistCards,
         galleryTitle: "Artistas"

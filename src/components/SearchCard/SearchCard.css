@@ -1,47 +1,115 @@
-.search-card {
-    width: 13vw;
-    height: 36vh;
-    display: flex;
-    flex-direction: column;
+.search-card-clickable {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.search-card-clickable:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--dl-shadow-card-hover);
+}
+
+.search-card-clickable:focus {
+    outline: 2px solid var(--dl-color-primary-500);
+    outline-offset: 2px;
     border-radius: var(--dl-layout-radius-cardradius);
+}
+
+.search-card-clickable:active {
+    transform: translateY(-2px);
+}
+
+.search-card-image-container {
+    position: relative;
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-radius: var(--dl-layout-radius-radius8);    
-}
-
-.search-card:hover {
-    background-color: #050625;
-}
-
-.search-card-image {
-    margin-top: 0.75rem;
-    object-fit: cover;
     border-radius: var(--dl-layout-radius-imageradius);
-    align-self: center;
-    width: 12vw;
-    height: auto;
-    aspect-ratio: 1 / 1;
 }
 
-.search-card-description {
-    padding-left: 1rem;
+.search-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: var(--dl-layout-radius-imageradius);
 }
 
-.search-card-description-artist {
+.search-card-clickable:hover .search-card-overlay {
+    opacity: 1;
+}
+
+.search-card-play-button {
     color: var(--dl-color-gray-white);
-    align-self: flex-start;  
-    font-size: 1.25rem;
-    margin-top: 0.5rem;  
+    font-size: 2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    transform: scale(1);
+    transition: transform 0.2s ease;
 }
 
-.search-card-description-song-name {
-    font-size: 1rem;    
+.search-card-clickable:hover .search-card-play-button {
+    transform: scale(1.1);
 }
 
-.search-card-description-listeners-amount {
-    font-size: 0.8rem;
-    color: var(--dl-color-gray-700);
-    font-size: 1rem;
-    align-self: flex-start;
-    padding-top: 0.25rem;
+.search-card-clickable::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background: var(--dl-color-primary-500);
+    border-radius: 50%;
+    opacity: 0.6;
+    z-index: 1;
+}
+
+.search-card-clickable:hover::before {
+    opacity: 1;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.search-card-clickable.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.search-card-clickable.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--dl-color-primary-500);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

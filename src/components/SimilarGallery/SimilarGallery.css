@@ -1,0 +1,258 @@
+.similar-gallery {
+    max-width: 1200px;
+    margin: 0 auto var(--dl-layout-space-tripleunit) auto;
+    padding: 0 var(--dl-layout-space-unit);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--dl-layout-radius-cardradius);
+    box-shadow: var(--dl-shadow-card);
+    overflow: hidden;
+    position: relative;
+}
+
+.similar-gallery::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--dl-gradient-primary);
+    z-index: 1;
+}
+
+.similar-gallery-header {
+    padding: var(--dl-layout-space-doubleunit) var(--dl-layout-space-unit) var(--dl-layout-space-unit);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.similar-gallery-header-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    font-family: 'Bricolage Grotesque', var(--dl-font-family-primary);
+    color: var(--dl-color-gray-white);
+    margin: 0;
+    background: var(--dl-gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+    position: relative;
+}
+
+.similar-gallery-header-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60%;
+    background: var(--dl-gradient-primary);
+    border-radius: 1px;
+}
+
+.similar-gallery-body {
+    padding: var(--dl-layout-space-doubleunit) var(--dl-layout-space-unit);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--dl-layout-space-unit);
+    align-items: start;
+}
+
+.similar-gallery-body .search-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--dl-layout-radius-cardradius);
+    padding: var(--dl-layout-space-unit);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.similar-gallery-body .search-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at center,
+        rgba(150, 133, 198, 0.1) 0%,
+        transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
+
+.similar-gallery-body .search-card:hover::before {
+    opacity: 1;
+}
+
+.similar-gallery-body .search-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--dl-shadow-card-hover);
+    border-color: rgba(150, 133, 198, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.similar-gallery-body .search-card {
+    animation: fadeInUp 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+.similar-gallery-body .search-card:nth-child(1) { animation-delay: 0.1s; }
+.similar-gallery-body .search-card:nth-child(2) { animation-delay: 0.2s; }
+.similar-gallery-body .search-card:nth-child(3) { animation-delay: 0.3s; }
+.similar-gallery-body .search-card:nth-child(4) { animation-delay: 0.4s; }
+.similar-gallery-body .search-card:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.similar-gallery {
+    animation: slideInFromBottom 0.7s ease-out;
+}
+
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.similar-gallery:hover {
+    box-shadow: var(--dl-shadow-card-hover);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+.similar-gallery.loading .similar-gallery-body {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.02) 25%,
+        rgba(255, 255, 255, 0.04) 50%,
+        rgba(255, 255, 255, 0.02) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+    min-height: 250px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .similar-gallery {
+        margin-bottom: var(--dl-layout-space-doubleunit);
+        border-radius: var(--dl-layout-radius-radius4);
+    }
+    
+    .similar-gallery-header {
+        padding: var(--dl-layout-space-unit);
+    }
+    
+    .similar-gallery-header-title {
+        font-size: 1.25rem;
+    }
+    
+    .similar-gallery-body {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        padding: var(--dl-layout-space-unit);
+        gap: var(--dl-layout-space-halfunit);
+    }
+    
+    .similar-gallery-body .search-card:hover {
+        transform: translateY(-4px) scale(1.01);
+    }
+}
+
+@media (max-width: 480px) {
+    .similar-gallery {
+        margin-bottom: var(--dl-layout-space-unit);
+        border-radius: 0;
+    }
+    
+    .similar-gallery-header {
+        padding: var(--dl-layout-space-halfunit) var(--dl-layout-space-unit);
+    }
+    
+    .similar-gallery-body {
+        grid-template-columns: repeat(2, 1fr);
+        padding: var(--dl-layout-space-halfunit) var(--dl-layout-space-unit);
+    }
+    
+    .similar-gallery-body .search-card:hover {
+        transform: translateY(-2px);
+    }
+}
+
+.similar-gallery-header::after {
+    content: attr(data-count);
+    position: absolute;
+    right: var(--dl-layout-space-unit);
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(150, 133, 198, 0.2);
+    color: var(--dl-color-primary-300);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--dl-layout-radius-buttonradius);
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid rgba(150, 133, 198, 0.3);
+}
+
+.similar-gallery-body .search-card::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -10px;
+    width: 20px;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        rgba(150, 133, 198, 0.5) 0%,
+        transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.similar-gallery-body .search-card:not(:last-child):hover::after {
+    opacity: 1;
+}
+
+.similar-gallery.empty .similar-gallery-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    color: var(--dl-color-gray-700);
+    font-style: italic;
+}
+
+.similar-gallery.empty .similar-gallery-body::before {
+    content: 'No se encontraron artistas similares';
+    font-size: 1.1rem;
+}
