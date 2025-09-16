@@ -3,10 +3,10 @@ import type { CardProps } from "../../components/Card/Card"
 import type { PeekProps } from "../../components/Peek/Peek"
 import { Header } from "../../components/Header/Header"
 import { CardGallery, type CardGalleryProps } from "../../components/CardGallery/CardGallery"
-import { PeekGallery ,type PeekGalleryProps } from "../../components/PeekGallery/PeekGallery"
+import { PeekGallery, type PeekGalleryProps } from "../../components/PeekGallery/PeekGallery"
 import { Footer } from "../../components/Footer/Footer"
 import { useEffect, useState } from "react"
-
+import { useNavigate } from "react-router-dom"
 
 interface TrackResponse {
   tracks: TrackResponseObject;
@@ -46,6 +46,7 @@ interface ArtistPeek {
   name: string;
   image: string;
   listeners: string;
+  mbid: string;
 }
 
 function injectParams(baseUrl: URL, params: Object){
@@ -61,8 +62,18 @@ function injectParams(baseUrl: URL, params: Object){
 function Index() {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [artists, setArtists] = useState<ArtistPeek[]>([]);
+  const navigate = useNavigate();
   const baseUrl = new URL('https://ws.audioscrobbler.com/2.0/?');
   const API_KEY = '38c33b10c98373d07e536e89fee77c1e';  
+
+  // Navigation functions
+  const navigateToTrack = (mbid: string) => {
+    navigate(`/track?q=${mbid}`);
+  };
+
+  const navigateToArtist = (mbid: string) => {
+    navigate(`/artist?q=${mbid}`);
+  };
 
   useEffect(() => {
     const fetchTracks = async () => {
@@ -88,7 +99,7 @@ function Index() {
           }
           let trackInfoUrl = injectParams(baseUrl, trackInfoParams);            
           const trackInfo = await fetch(trackInfoUrl);
-          if(!response.ok) throw new Error("Track info retrieval Error");
+          if(!trackInfo.ok) throw new Error("Track info retrieval Error");
           const retrievedTrackInfo = await trackInfo.json();
           currentTrack.image = retrievedTrackInfo?.track?.album?.image[3]['#text'] ? 
           retrievedTrackInfo?.track?.album?.image[3]['#text'] :
@@ -139,8 +150,8 @@ function Index() {
     fetchTopArtists();
   }, []);
 
-  const trackGalleryProps = generateTrackGallery(tracks);  
-  const artistGalleryProps = generateArtistGallery(artists);
+  const trackGalleryProps = generateTrackGallery(tracks, navigateToTrack);  
+  const artistGalleryProps = generateArtistGallery(artists, navigateToArtist);
   return (
     <>
       <div className="index">
@@ -152,14 +163,22 @@ function Index() {
     </>
   )
 }
-function generateTrackGallery(tracks: Track[]){
+
+function generateTrackGallery(tracks: Track[], navigateToTrack: (mbid: string) => void){
   const trackData: CardProps[] = [];
   tracks.forEach((currentTrack) => {
     const track: CardProps = {
       imageUrl: currentTrack.image,
       artistName: currentTrack.artist.name,
       songName: currentTrack.name,
-      listenersAmount: `Listeners: ${currentTrack.listeners}`
+      listenersAmount: `Listeners: ${currentTrack.listeners}`,
+      onClick: () => {
+        if (currentTrack.mbid && currentTrack.mbid.trim() !== '') {
+          navigateToTrack(currentTrack.mbid);
+        } else {
+          console.warn('No valid MBID for track:', currentTrack.name);
+        }
+      }
     }
     trackData.push(track);
   })
@@ -170,13 +189,21 @@ function generateTrackGallery(tracks: Track[]){
   }
   return trackGalleryProps;
 }
-function generateArtistGallery(artists: ArtistPeek[]){
+
+function generateArtistGallery(artists: ArtistPeek[], navigateToArtist: (mbid: string) => void){
   const peekData: PeekProps[] = [];
   artists.forEach((currentArtist) => {
     const artist: PeekProps = {
       imageUrl: currentArtist.image,
       title: currentArtist.name,
-      description: `Listeners: ${currentArtist.listeners}`
+      description: `Listeners: ${currentArtist.listeners}`,
+      onClick: () => {
+        if (currentArtist.mbid && currentArtist.mbid.trim() !== '') {
+          navigateToArtist(currentArtist.mbid);
+        } else {
+          console.warn('No valid MBID for artist:', currentArtist.name);
+        }
+      }
     }
     peekData.push(artist);
   })
@@ -188,4 +215,5 @@ function generateArtistGallery(artists: ArtistPeek[]){
   }
   return artistGalleryProps;
 }
+
 export default Index
