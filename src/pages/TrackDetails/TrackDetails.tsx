@@ -240,6 +240,7 @@ function getSimilarGalleryProps(similarTracks: SimilarTrack[], navigate: (mbid: 
             onClick: () => {
                 if (currentTrack.mbid && currentTrack.mbid.trim() !== '') {
                     navigate(currentTrack.mbid);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
                     console.warn('No valid MBID for track:', currentTrack.name);
                 }
