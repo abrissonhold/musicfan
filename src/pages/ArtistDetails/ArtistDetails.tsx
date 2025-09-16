@@ -221,6 +221,7 @@ function getTracklistProps(topTracks: Array<Track>, navigate: (mbid: string) => 
             onClick: () => {
                 if (currentTrack.mbid && currentTrack.mbid.trim() !== '') {
                     navigate(currentTrack.mbid);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
                     console.warn('No valid MBID for track:', currentTrack.name);
                 }
@@ -247,6 +248,7 @@ function getSimilarGalleryProps(similarArtist: SimilarArtist[], navigate: (mbid:
             onClick: () => {
                 if (currentArtist.mbid && currentArtist.mbid.trim() !== '') {
                     navigate(currentArtist.mbid);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
                     console.warn('No valid MBID for artist:', currentArtist.name);
                 }

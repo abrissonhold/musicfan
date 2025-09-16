@@ -175,6 +175,7 @@ function generateTrackGallery(tracks: Track[], navigateToTrack: (mbid: string) =
       onClick: () => {
         if (currentTrack.mbid && currentTrack.mbid.trim() !== '') {
           navigateToTrack(currentTrack.mbid);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
           console.warn('No valid MBID for track:', currentTrack.name);
         }
@@ -200,6 +201,7 @@ function generateArtistGallery(artists: ArtistPeek[], navigateToArtist: (mbid: s
       onClick: () => {
         if (currentArtist.mbid && currentArtist.mbid.trim() !== '') {
           navigateToArtist(currentArtist.mbid);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
           console.warn('No valid MBID for artist:', currentArtist.name);
         }
