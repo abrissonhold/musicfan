@@ -1,7 +1,7 @@
 .banner-artist {
     position: relative;
     width: 100%;
-    min-height: 60vh;
+    min-height: 30vh;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -13,6 +13,7 @@
     overflow: hidden;
     border-radius: var(--dl-layout-radius-cardradius);
     margin-bottom: var(--dl-layout-space-doubleunit);
+    color: var(--dl-color-primary-500);
 }
 
 .banner-artist::before {
@@ -54,7 +55,8 @@
     font-weight: 800;
     font-family: 'Bricolage Grotesque', var(--dl-font-family-primary);
     margin-bottom: var(--dl-layout-space-unit);
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    text-shadow: 0  4px 0px rgba(255, 255, 255, 0.7);
+    background: none;
     letter-spacing: -0.02em;
     line-height: 0.9;
 }

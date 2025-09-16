@@ -30,10 +30,6 @@
     box-shadow: 0 2px 15px rgba(150, 133, 198, 0.2);
 }
 
-.track-item:hover::before {
-    width: 3px;
-}
-
 .track-item:active {
     transform: translateX(2px);
     background: rgba(255, 255, 255, 0.08);
@@ -114,17 +110,17 @@
 }
 
 .track-item:nth-child(1) .track-item-index {
-    color: var(--dl-color-success-500);
+    color: var(--dl-color-success-300);
     font-weight: 700;
 }
 
 .track-item:nth-child(2) .track-item-index {
-    color: var(--dl-color-gray-500);
+    color: var(--dl-color-success-500);
     font-weight: 700;
 }
 
 .track-item:nth-child(3) .track-item-index {
-    color: var(--dl-color-theme-secondary2);
+    color:  var(--dl-color-success-700);
     font-weight: 700;
 }
 

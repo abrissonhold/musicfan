@@ -42,17 +42,6 @@
     position: relative;
 }
 
-.tracklist-header-title::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 50%;
-    height: 2px;
-    background: var(--dl-gradient-primary);
-    border-radius: 1px;
-}
-
 .tracklist-body {
     padding: var(--dl-layout-space-unit) 0;
     display: flex;

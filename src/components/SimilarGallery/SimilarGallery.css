@@ -207,21 +207,6 @@
     }
 }
 
-.similar-gallery-header::after {
-    content: attr(data-count);
-    position: absolute;
-    right: var(--dl-layout-space-unit);
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(150, 133, 198, 0.2);
-    color: var(--dl-color-primary-300);
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--dl-layout-radius-buttonradius);
-    font-size: 0.8rem;
-    font-weight: 500;
-    border: 1px solid rgba(150, 133, 198, 0.3);
-}
-
 .similar-gallery-body .search-card::after {
     content: '';
     position: absolute;
