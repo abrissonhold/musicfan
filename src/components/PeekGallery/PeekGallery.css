@@ -30,7 +30,7 @@
 
 .peek-gallery-body {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     padding: var(--dl-layout-space-unit);
     padding-top: var(--dl-layout-space-halfunit);

@@ -59,7 +59,7 @@ function Search() {
                 const searchParams = {
                     method: "track.search",
                     api_key: API_KEY,
-                    limit: 5,
+                    limit: 6,
                     format: "json",
                     track: query,
                 };
@@ -99,7 +99,7 @@ function Search() {
                 const searchParams = {
                     method: "album.search",
                     api_key: API_KEY,
-                    limit: 5,
+                    limit: 6,
                     format: "json",
                     album: query,
                 };
@@ -129,7 +129,7 @@ function Search() {
                     api_key: API_KEY,
                     artist: query,
                     format: "json",
-                    limit: 5,
+                    limit: 6,
                 };
                 const artistSearchUrl = injectParams(baseUrl, artistSearchParams);
                 const response = await fetch(artistSearchUrl);

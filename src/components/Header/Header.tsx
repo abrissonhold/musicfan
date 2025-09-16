@@ -40,7 +40,7 @@ function Header({ onLogoClick, activeSection, isSearching }: HeaderProps) {
 
     const navItems = [
         { label: "Éxitos", section: "hits" },
-        { label: "Tus favoritos", section: "favorites" },
+        { label: "Tu playlist", section: "favorites" },
         { label: "Artistas destacados", section: "artists" },
     ];
 

@@ -1,6 +1,7 @@
 .card {
-    width: 17.5vw;
-    height: 50vh;
+    width: 18vw;
+    min-height: 40vh;
+    max-height: 55vh;
     display: flex;
     flex-direction: column;
     background: linear-gradient(180deg, rgba(76, 78, 130, 0.6), #080a45);
@@ -22,6 +23,9 @@
     object-fit: cover;
     border-radius: var(--dl-layout-radius-imageradius);
     align-self: center;
+    aspect-ratio: 1 / 1;
+    overflow: auto;
+    width: fit-content;
 }
 
 .card-description {
@@ -31,10 +35,13 @@
 .card-description-artist {
     color: var(--dl-color-gray-white);
     align-self: flex-start;    
+    font-weight: 400;
+    font-size: 1.5rem;
 }
 
 .card-description-song-name {
-    font-size: 1rem;    
+    font-size: 1rem;  
+    font-weight: 300;  
 }
 
 .card-description-listeners-amount {
@@ -45,7 +52,7 @@
     padding-top: 0.25rem;
 }
 
-@media (max-width: 1600px) {
+/* @media (max-width: 1600px) {
     .galeria-phone-songs {
         display: none;
     }
@@ -67,7 +74,7 @@
     }
 }
 
-/* @media (max-width: 1200px) {
+@media (max-width: 1200px) {
     .galeria-phone-songs {
         display: none;
     }
