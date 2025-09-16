@@ -1,4 +1,6 @@
+import { useState } from "react";
 import "./BasicBanner.css";
+import { ShareModal } from "../ShareModal/ShareModal";
 
 interface BasicBannerProps{
     imageUrl: string;
@@ -10,6 +12,7 @@ interface BasicBannerProps{
 }
 
 function BasicBanner({imageUrl, artist, name, listeners, artistMbid, onArtistClick}: BasicBannerProps){
+    const [open, setOpen] = useState(false);
     const handleArtistClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (onArtistClick) {
@@ -36,6 +39,10 @@ function BasicBanner({imageUrl, artist, name, listeners, artistMbid, onArtistCli
                 </div>
                 <div className="basic-banner-body">
                     <p className="basic-banner-body-listeners">{listeners}</p>
+                    <div>
+                    <button onClick={() => setOpen(true)}>Share</button>
+                        <ShareModal isOpen={open} onClose={() => setOpen(false)}  title={name}/>
+                    </div>
                 </div>
             </section>
         </>
