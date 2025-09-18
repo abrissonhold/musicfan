@@ -10,6 +10,7 @@ import { injectParams } from "../../helpers/helper";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import type { TrackItemProps } from "../../components/TrackItem/TrackItem";
 import type { SearchCardProps } from "../../components/SearchCard/SearchCard";
+import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
 
 interface ArtistResponse {
     name: string;
@@ -56,8 +57,7 @@ function ArtistDetails() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const query = searchParams.get("q");
-
-    // Navigation functions
+    
     const navigateToTrack = (mbid: string) => {
         navigate(`/track?q=${mbid}`);
     };
@@ -186,21 +186,32 @@ function ArtistDetails() {
         const bannerArtistProps = getBannerArtistProps(artist);
         const tracklistProps = getTracklistProps(topTracks, navigateToTrack);
         const similarArtistProps = getSimilarGalleryProps(similarArtists, navigateToArtist);
+        const playlist = localStorage.getItem("favorites") != null ? localStorage.getItem("favorites") : JSON.stringify({tracks: ['Empty']});
+        const parsedPlaylist = JSON.parse(playlist as string);  
+        const playlistMenuProps: PlaylistProps = {
+            tracks: parsedPlaylist
+        }
 
         return (
             <>
                 <Header></Header>
-                <BannerArtist {...bannerArtistProps}></BannerArtist>
-                <section className="artist-description">
-                    <p className="artist-description-text">{artist.bio.content}</p>
-                </section>
-                <Tracklist {...tracklistProps}></Tracklist>
-                <SimilarGallery {...similarArtistProps}></SimilarGallery>
+                <div className="gridded-content">
+                    <PlaylistMenu {...playlistMenuProps}></PlaylistMenu>
+                    <div className="main-content">
+                        <BannerArtist {...bannerArtistProps}></BannerArtist>
+                        <section className="artist-description">
+                            <p className="artist-description-text">{artist.bio.content}</p>
+                        </section>
+                        <Tracklist {...tracklistProps}></Tracklist>
+                        <SimilarGallery {...similarArtistProps}></SimilarGallery>
+                    </div>
+                </div>
                 <Footer></Footer>
             </>
         )
     }
 }
+
 
 function getBannerArtistProps(artistInfo: ArtistResponse) {
     const bannerArtistProps: BannerArtistProps = {
@@ -252,7 +263,8 @@ function getSimilarGalleryProps(similarArtist: SimilarArtist[], navigate: (mbid:
                 } else {
                     console.warn('No valid MBID for artist:', currentArtist.name);
                 }
-            }
+            },
+            mbid: currentArtist.mbid,
         }
         return searchCardProp;
     })

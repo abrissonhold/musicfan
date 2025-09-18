@@ -8,6 +8,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { baseUrl, API_KEY } from "../../helpers/constants";
 import { injectParams } from "../../helpers/helper";
 import type { SearchCardProps } from "../../components/SearchCard/SearchCard";
+import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
 
 interface Track {
     artist: Artist;
@@ -175,48 +176,53 @@ function TrackDetails() {
 
         const basicBannerProps = getBasicBannerProps(track, navigateToArtistHandler);
         const similarGalleryProps = getSimilarGalleryProps(similarTracks, navigateToTrack);
-                const trackWikiContent = track.wiki?.content
-            ? track.wiki.content
-            : track.album?.title
-                ? `Pertenece al álbum "${track.album.title}"`
-                : "No hay una descripción disponible.";
-
+        const fromAlbum = track.album ? track.album.title : '';
+        let trackWikiContent = track.wiki?.content
+        ? track.wiki.content
+        : "No hay una descripción disponible.";
+        trackWikiContent = trackWikiContent;        
+        const playlist = localStorage.getItem("favorites") != null ? localStorage.getItem("favorites") : JSON.stringify({tracks: ['Empty']});
+        const parsedPlaylist = JSON.parse(playlist as string);  
+        const playlistMenuProps: PlaylistProps = {
+            tracks: parsedPlaylist
+        }
         return (
             <>
                 <Header></Header>
-                <BasicBanner {...basicBannerProps}></BasicBanner>
-                <section className="track-description">
-                    <p className="track-description-text">
-                        {track.wiki?.content ? (
-                            trackWikiContent
-                        ) : track.album?.title ? (
-                            <>
-                                Pertenece al álbum{' '}
-                                {navigateToAlbumHandler ? (
-                                    <span 
-                                        className="track-description-album-link"
-                                        onClick={navigateToAlbumHandler}
-                                        title={`Ver álbum ${track.album.title}`}
-                                    >
-                                        "{track.album.title}"
-                                    </span>
-                                ) : (
-                                    `"${track.album.title}"`
+                <div className="gridded-content">
+                    <PlaylistMenu {...playlistMenuProps}></PlaylistMenu>
+                    <div className="main-content">
+                        <BasicBanner {...basicBannerProps}></BasicBanner>
+                                <section className="track-description">
+                                    <p className="track-description-text">
+                                        <div>
+                                            Pertenece al álbum{' '}
+                                            {navigateToAlbumHandler ? (
+                                                <span 
+                                                    className="track-description-album-link"
+                                                    onClick={navigateToAlbumHandler}
+                                                    title={`Ver álbum ${fromAlbum}`}
+                                                >
+                                                    "{fromAlbum}"
+                                                </span>
+                                            ) : (
+                                                `"${fromAlbum}"`
+                                            )}
+                                        </div>
+                                        {trackWikiContent}                                                                                                                          
+                                    </p>                                    
+                                </section>
+                                {similarTracks.length > 0 && (
+                                    <SimilarGallery {...similarGalleryProps}></SimilarGallery>
                                 )}
-                            </>
-                        ) : (
-                            "No hay una descripción disponible."
-                        )}
-                    </p>
-                </section>
-                {similarTracks.length > 0 && (
-                    <SimilarGallery {...similarGalleryProps}></SimilarGallery>
-                )}
+                    </div>
+                </div>
                 <Footer></Footer>
             </>
         )
     }
 }
+
 
 function getBasicBannerProps(track: Track, onArtistClick?: () => void) {
     const basicBannerProps: BasicBannerProps = {
@@ -238,13 +244,15 @@ function getSimilarGalleryProps(similarTracks: SimilarTrack[], navigate: (mbid: 
             subtitle: currentTrack.artist.name,
             listenersAmount: currentTrack.playcount,
             onClick: () => {
+                console.log('Hace click');
                 if (currentTrack.mbid && currentTrack.mbid.trim() !== '') {
                     navigate(currentTrack.mbid);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
                     console.warn('No valid MBID for track:', currentTrack.name);
                 }
-            }
+            },
+            mbid: currentTrack.mbid
         }
         return searchCardProp;
     });

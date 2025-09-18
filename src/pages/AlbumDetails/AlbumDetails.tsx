@@ -8,6 +8,7 @@ import { baseUrl, API_KEY } from "../../helpers/constants";
 import { injectParams } from "../../helpers/helper";
 import { Tracklist, type TrackListProps } from "../../components/Tracklist/Tracklist";
 import type { TrackItemProps } from "../../components/TrackItem/TrackItem";
+import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
 
 interface Album {
     artist: string;
@@ -224,29 +225,36 @@ function AlbumDetails() {
     
     const descriptionContent = formatDescription(album.wiki?.content || album.wiki?.summary || '');
     const hasLongContent = descriptionContent.length > 1000;
+    const playlist = localStorage.getItem("favorites") != null ? localStorage.getItem("favorites") : JSON.stringify({tracks: ['Empty']});
+    const parsedPlaylist = JSON.parse(playlist as string);  
+    const playlistMenuProps: PlaylistProps = {
+        tracks: parsedPlaylist
+    }
 
     return (
         <>
             <Header onLogoClick={handleBackToHome} />
-            <BasicBanner {...basicBannerProps} />
+                <div className="gridded-content">
+                    <PlaylistMenu {...playlistMenuProps}></PlaylistMenu>
+                    <div className="main-content">
+                        <BasicBanner {...basicBannerProps} />
+                        {descriptionContent && (
+                            <section className="album-description">
+                                <div className={`album-description-text ${hasLongContent ? 'long-content' : ''}`}>
+                                    {descriptionContent}
+                                </div>
+                            </section>
+                        )}
 
-            {descriptionContent && (
-                <section className="album-description">
-                    <div className={`album-description-text ${hasLongContent ? 'long-content' : ''}`}>
-                        {descriptionContent}
+                        {album.tracks?.track && album.tracks.track.length > 0 && (
+                            <Tracklist {...tracklistProps} />
+                        )}
                     </div>
-                </section>
-            )}
-
-            {album.tracks?.track && album.tracks.track.length > 0 && (
-                <Tracklist {...tracklistProps} />
-            )}
-
+                </div>
             <Footer />
         </>
     );
 }
-
 function getBasicBannerProps(album: Album, onArtistClick?: () => void): BasicBannerProps {
     const defaultImage = 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
     

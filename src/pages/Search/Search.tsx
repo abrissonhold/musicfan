@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Footer } from "../../components/Footer/Footer";
 import { Header } from "../../components/Header/Header";
-import { PlaylistMenu } from "../../components/PlaylistMenu/PlaylistMenu";
+import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
 import type { SearchCardProps } from "../../components/SearchCard/SearchCard";
 import {
     SearchCardGallery,
@@ -77,7 +77,7 @@ function Search() {
                     };
                     let trackInfoUrl = injectParams(baseUrl, trackInfoParams);
                     const trackInfo = await fetch(trackInfoUrl);
-                    if (!response.ok) throw new Error("Track info retrieval Error");
+                    if (!trackInfo.ok) throw new Error("Track info retrieval Error");
                     const retrievedTrackInfo = await trackInfo.json();
                     currentTrack.image = retrievedTrackInfo?.track?.album?.image[3][
                         "#text"
@@ -166,13 +166,17 @@ function Search() {
         const tracksGalleryProps = getTracksProps(tracks, navigateToTrack);
         const albumGaleryProps = getAlbumsProps(albums, navigateToAlbum);
         const artistGalleryProps = getArtistsProps(artists, navigateToArtist);
-
+        const playlist = localStorage.getItem("favorites") != null ? localStorage.getItem("favorites") : JSON.stringify({tracks: ['Empty']});
+        const parsedPlaylist = JSON.parse(playlist as string);        
+        const playlistMenuProps: PlaylistProps = {
+            tracks: parsedPlaylist
+        }
         return (
             <>
                 <div className="search">
                     <Header></Header>
                     <div className="gridded-content">
-                        <PlaylistMenu></PlaylistMenu>
+                        <PlaylistMenu {...playlistMenuProps}></PlaylistMenu>
                         <div className="main-content">
                             <SearchCardGallery {...tracksGalleryProps}></SearchCardGallery>
                             <SearchCardGallery {...albumGaleryProps}></SearchCardGallery>
@@ -195,7 +199,8 @@ function getArtistsProps(artists: Artist[], navigate: (mbid: string) => void) {
             imageUrl: a.image,
             title: a.name,
             listenersAmount: a.listeners,
-            onClick: () => navigate(a.mbid)
+            onClick: () => navigate(a.mbid),
+            mbid: a.mbid,
         }))
     };
 }
@@ -208,7 +213,8 @@ function getAlbumsProps(albums: Album[], navigate: (mbid: string) => void) {
             imageUrl: al.image,
             title: al.name,
             subtitle: al.artist,
-            onClick: () => navigate(al.mbid)
+            onClick: () => navigate(al.mbid),
+            mbid: al.mbid
         }))
     };
 }
@@ -219,9 +225,10 @@ function getTracksProps(tracks: Track[], navigate: (mbid: string) => void) {
         searchCardPropsArray: tracks.map(t => ({
             type: "track" as const,
             imageUrl: t.image,
-            title: t.artist,
-            subtitle: t.name,
-            onClick: () => navigate(t.mbid)
+            title: t.name,
+            subtitle: t.artist,
+            onClick: () => navigate(t.mbid),
+            mbid: t.mbid
         }))
     };
 }
