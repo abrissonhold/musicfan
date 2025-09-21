@@ -19,6 +19,7 @@ interface Album {
     playcount: string;
     tracks: Tracks;
     wiki: Wiki;
+    mbid: string;
     artistMbid?: string; 
 }
 
@@ -52,8 +53,9 @@ function AlbumDetails() {
     const query = searchParams.get("q");
 
     const navigateToTrack = (trackName: string, artistName: string, mbid?: string) => {
-        if (mbid) {
+        if (mbid && mbid.trim() !== '') {
             navigate(`/track?q=${mbid}`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             const searchQuery = `${trackName} ${artistName}`;
             navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
@@ -62,6 +64,7 @@ function AlbumDetails() {
 
     const navigateToArtist = (artistMbid: string) => {
         navigate(`/artist?q=${artistMbid}`);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleBackToHome = () => {
@@ -100,6 +103,7 @@ function AlbumDetails() {
                 if (!albumData) {
                     throw new Error("No se encontró información del álbum");
                 }
+
                 if (albumData?.artist) {
                     try {
                         const artistSearchParams = {
@@ -150,11 +154,12 @@ function AlbumDetails() {
                         }
                         return track;
                     });
+
                     await Promise.allSettled(trackPromises);
                 }
 
                 const referenceItem: ReferenceItem = {
-                    mbid: albumData.mbid ? albumData.mbid : query,
+                    mbid: albumData.mbid || query,
                     type: "album"
                 };
                 updateHistory(referenceItem);
@@ -175,7 +180,7 @@ function AlbumDetails() {
         if (!content) return "";
         
         return content
-            .replace(/<[^>]*>/g, '') // Remueve parte de las tags HTML
+            .replace(/<[^>]*>/g, '') 
             .replace(/\n\s*\n/g, '\n\n') 
             .trim();
     };
@@ -184,9 +189,16 @@ function AlbumDetails() {
         return (
             <>
                 <Header isSearching={true} onLogoClick={handleBackToHome} />
-                <div className="album-description loading">
-                    <div className="album-description-text">
-                        Cargando información del álbum...
+                <div className="gridded-content">
+                    <div className="playlist-loading">
+                        <p>Cargando playlist...</p>
+                    </div>
+                    <div className="main-content">
+                        <div className="album-description loading">
+                            <div className="album-description-text">
+                                Cargando información del álbum...
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <Footer />
@@ -198,24 +210,31 @@ function AlbumDetails() {
         return (
             <>
                 <Header onLogoClick={handleBackToHome} />
-                <div className="album-description empty">
-                    <div className="album-description-text">
-                        {error || "No se pudo cargar la información del álbum"}
-                        <br />
-                        <button 
-                            onClick={handleBackToHome}
-                            style={{
-                                marginTop: '1rem',
-                                padding: '0.5rem 1rem',
-                                background: 'var(--dl-gradient-primary)',
-                                border: 'none',
-                                borderRadius: 'var(--dl-layout-radius-buttonradius)',
-                                color: 'white',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            Volver al inicio
-                        </button>
+                <div className="gridded-content">
+                    <div className="playlist-loading">
+                        <p>Error en playlist</p>
+                    </div>
+                    <div className="main-content">
+                        <div className="album-description empty">
+                            <div className="album-description-text">
+                                {error || "No se pudo cargar la información del álbum"}
+                                <br />
+                                <button 
+                                    onClick={handleBackToHome}
+                                    style={{
+                                        marginTop: '1rem',
+                                        padding: '0.5rem 1rem',
+                                        background: 'var(--dl-gradient-primary)',
+                                        border: 'none',
+                                        borderRadius: 'var(--dl-layout-radius-buttonradius)',
+                                        color: 'white',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    Volver al inicio
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <Footer />
@@ -232,36 +251,39 @@ function AlbumDetails() {
     
     const descriptionContent = formatDescription(album.wiki?.content || album.wiki?.summary || '');
     const hasLongContent = descriptionContent.length > 1000;
-    const playlist = localStorage.getItem("favorites") != null ? localStorage.getItem("favorites") : JSON.stringify({tracks: ['Empty']});
+
+    const playlist = localStorage.getItem("favorites") != null 
+        ? localStorage.getItem("favorites") 
+        : JSON.stringify({tracks: ['Empty']});
     const parsedPlaylist = JSON.parse(playlist as string);  
     const playlistMenuProps: PlaylistProps = {
         tracks: parsedPlaylist
-    }
+    };
 
     return (
         <>
             <Header onLogoClick={handleBackToHome} />
-                <div className="gridded-content">
-                    <PlaylistMenu {...playlistMenuProps}></PlaylistMenu>
-                    <div className="main-content">
-                        <BasicBanner {...basicBannerProps} />
-                        {descriptionContent && (
-                            <section className="album-description">
-                                <div className={`album-description-text ${hasLongContent ? 'long-content' : ''}`}>
-                                    {descriptionContent}
-                                </div>
-                            </section>
-                        )}
-
-                        {album.tracks?.track && album.tracks.track.length > 0 && (
-                            <Tracklist {...tracklistProps} />
-                        )}
-                    </div>
+            <div className="gridded-content">
+                <PlaylistMenu {...playlistMenuProps} />
+                <div className="main-content">
+                    <BasicBanner {...basicBannerProps} />
+                    {descriptionContent && (
+                        <section className="album-description">
+                            <div className={`album-description-text ${hasLongContent ? 'long-content' : ''}`}>
+                                {descriptionContent}
+                            </div>
+                        </section>
+                    )}
+                    {album.tracks?.track && album.tracks.track.length > 0 && (
+                        <Tracklist {...tracklistProps} />
+                    )}
                 </div>
+            </div>
             <Footer />
         </>
     );
 }
+
 function getBasicBannerProps(album: Album, onArtistClick?: () => void): BasicBannerProps {
     const defaultImage = 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
     
@@ -292,7 +314,7 @@ function getTracklistProps(
         index: index + 1,
         imageUrl: albumImage,
         name: currentTrack.name,
-        listeners: String(currentTrack.duration || '0'), // Last.fm no proporciona listeners por track en album.getinfo
+        listeners: String(currentTrack.duration || '0'),
         onClick: () => navigateToTrack(currentTrack.name, album.artist, currentTrack.mbid)
     }));
     
