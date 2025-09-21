@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ArtistDetails } from './pages/ArtistDetails/ArtistDetails.tsx'
 import { TrackDetails } from './pages/TrackDetails/TrackDetails.tsx'
 import { AlbumDetails } from './pages/AlbumDetails/AlbumDetails.tsx'
+import { History } from './pages/History/History.tsx'
 
 const router = createBrowserRouter([
   { path: '/', element: <Index />},
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
   { path: '/artist', element: <ArtistDetails />},
   { path: '/track', element: <TrackDetails />},
   { path: '/album', element: <AlbumDetails />},
+  { path: '/history', element: <History /> },
 ])
 
 createRoot(document.getElementById('root')!).render(

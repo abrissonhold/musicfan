@@ -5,10 +5,11 @@ import { Header } from "../../components/Header/Header";
 import "./AlbumDetails.css";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { baseUrl, API_KEY } from "../../helpers/constants";
-import { injectParams } from "../../helpers/helper";
+import { injectParams, updateHistory } from "../../helpers/helper";
 import { Tracklist, type TrackListProps } from "../../components/Tracklist/Tracklist";
 import type { TrackItemProps } from "../../components/TrackItem/TrackItem";
 import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
+import type { ReferenceItem } from "../History/History";
 
 interface Album {
     artist: string;
@@ -151,6 +152,12 @@ function AlbumDetails() {
                     });
                     await Promise.allSettled(trackPromises);
                 }
+
+                const referenceItem: ReferenceItem = {
+                    mbid: albumData.mbid ? albumData.mbid : query,
+                    type: "album"
+                };
+                updateHistory(referenceItem);
                 
                 setAlbum(albumData);
             } catch (e) {

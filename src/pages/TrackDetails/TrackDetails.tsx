@@ -6,9 +6,10 @@ import { SimilarGallery, type SimilarGalleryProps } from "../../components/Simil
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { baseUrl, API_KEY } from "../../helpers/constants";
-import { injectParams } from "../../helpers/helper";
+import { injectParams, updateHistory } from "../../helpers/helper";
 import type { SearchCardProps } from "../../components/SearchCard/SearchCard";
 import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
+import type { ReferenceItem } from "../History/History";
 
 interface Track {
     artist: Artist;
@@ -71,6 +72,7 @@ function TrackDetails() {
     };
 
     useEffect(() => {
+        
         const fetchTrack = async () => {
             try {
                 const trackParams = {
@@ -113,7 +115,11 @@ function TrackDetails() {
                         console.warn(`Could not find mbid for album: ${trackData.album.title}`, e);
                     }
                 }
-                
+                const referenceItem: ReferenceItem = {
+                    mbid: trackData.mbid,
+                    type: "track"
+                };
+                updateHistory(referenceItem);
                 setTrack(trackData);
             }
             catch (e) {
@@ -222,7 +228,6 @@ function TrackDetails() {
         )
     }
 }
-
 
 function getBasicBannerProps(track: Track, onArtistClick?: () => void) {
     const basicBannerProps: BasicBannerProps = {
