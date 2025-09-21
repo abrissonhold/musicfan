@@ -1,5 +1,5 @@
 .card-gallery {
-    height: auto;
+    /* height: auto; */
     display: flex;
     overflow: auto;
     position: relative;
@@ -43,6 +43,7 @@
 }
 
 .card-gallery-body {
+    min-height: 40vh;
     width: 100%;
     display: flex;
     gap: 2rem;
