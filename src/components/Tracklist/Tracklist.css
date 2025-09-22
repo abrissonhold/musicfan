@@ -12,16 +12,6 @@
     position: relative;
 }
 
-.tracklist::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--dl-color-theme-primary1);
-    z-index: 1;
-}
-
 .tracklist-header {
     padding: var(--dl-layout-space-doubleunit) var(--dl-layout-space-unit) var(--dl-layout-space-unit);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);

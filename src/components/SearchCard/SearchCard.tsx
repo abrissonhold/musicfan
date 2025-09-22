@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import "./SearchCard.css";
+import { addToFavorites, isFavorite } from "../../helpers/helper";
 
 type CardType = "artist" | "album" | "track";
 
 interface SearchCardProps {
   type: CardType;
   imageUrl: string;
-  title: string;     
-  subtitle?: string;   
+  title: string;
+  subtitle?: string;
   listenersAmount?: string | null;
   mbid: string;
   onClick?: () => void;
@@ -15,35 +16,31 @@ interface SearchCardProps {
 
 function SearchCard({ type, imageUrl, title, subtitle, listenersAmount, mbid, onClick }: SearchCardProps) {
   const [isFav, setIsFav] = useState<boolean>(false);
-  const addToFav = (mbid: string) => {
-    const playlist = localStorage.getItem("favorites") != null ? localStorage.getItem("favorites") : "";
-    const parsedPlaylist: string[] = playlist === "" ? [] : JSON.parse(playlist as string);
-    const mbidIndex = parsedPlaylist.findIndex((id: string) => id === mbid);
-    if(mbidIndex != -1){
-      parsedPlaylist.splice(mbidIndex, 1);
-      setIsFav(false);
-    }
-    else{
-      parsedPlaylist.push(mbid);
-      setIsFav(true);
-    }
-    localStorage.setItem("favorites", JSON.stringify(parsedPlaylist));
-  }  
-  
+
   useEffect(() => {
-    const verifyIsFav = (mbid: string) => {
-      const playlist = localStorage.getItem("favorites") != null ? localStorage.getItem("favorites") : "";
-      const parsedPlaylist: string[] = playlist === "" ? [] : JSON.parse(playlist as string);
-      const mbidIndex = parsedPlaylist.findIndex((id: string) => id === mbid);
-      if(mbidIndex != -1){
-        setIsFav(true);
-      }
-      else{
-        setIsFav(false);
-      }
+    setIsFav(isFavorite(mbid));
+    
+    const handleFavoritesUpdate = (event: CustomEvent) => {
+      setIsFav(isFavorite(mbid));
+    };
+    
+    window.addEventListener("favoritesUpdated", handleFavoritesUpdate as EventListener);
+    return () => window.removeEventListener("favoritesUpdated", handleFavoritesUpdate as EventListener);
+  }, [mbid]);
+
+  const handleFavoriteToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (!mbid || mbid.trim() === '') {
+      console.warn('Cannot toggle favorite: no valid MBID');
+      return;
     }
-    verifyIsFav(mbid);
-  }, [])
+    const newFavState = addToFavorites(mbid);
+    setIsFav(newFavState);
+    
+    console.log(`Track "${title}" ${newFavState ? 'added to' : 'removed from'} favorites`);
+  };
+
   return (
     <div className="search-card">
       <img
@@ -52,8 +49,8 @@ function SearchCard({ type, imageUrl, title, subtitle, listenersAmount, mbid, on
         alt={title}
         onClick={onClick}
       />
-      <div className="search-card-description">           
-       <div className="search-card-description-box">
+      <div className="search-card-description">
+        <div className="search-card-description-box">
           <p className="search-card-title">{title}</p>
           {(type === "album" || type === "track") && subtitle && (
             <p className="search-card-subtitle">{subtitle}</p>
@@ -64,15 +61,18 @@ function SearchCard({ type, imageUrl, title, subtitle, listenersAmount, mbid, on
             </p>
           )}
         </div>
-        {( type === "track") && (
-            <div className="search-card-description-favorites">
-              {isFav ? 
-              <img className="search-card-description-favorites-image" src='src\assets\fav.png' alt="" onClick={() => addToFav(mbid)}/> :
-              <img className="search-card-description-favorites-image" src='src\assets\noFav.png' alt="" onClick={() => addToFav(mbid)}/>         
-              }
-            </div>
-          )}   
-        
+
+        {type === "track" && (
+          <div className="search-card-description-favorites">
+            <img
+              className="search-card-description-favorites-image"
+              src={isFav ? "src/assets/fav.png" : "src/assets/noFav.png"}
+              alt={isFav ? "Quitar de favoritos" : "Agregar a favoritos"}
+              title={isFav ? `Quitar "${title}" de favoritos` : `Agregar "${title}" a favoritos`}
+              onClick={handleFavoriteToggle}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import "./PlaylistMenu.css"
+import "./PlaylistMenu.css";
 import { API_KEY, baseUrl } from "../../helpers/constants";
-import { injectParams } from "../../helpers/helper";
+import { injectParams, getFavorites, clearFavorites } from "../../helpers/helper";
 import { Tracklist, type TrackListProps } from "../Tracklist/Tracklist";
 import { type TrackItemProps } from "../TrackItem/TrackItem";
 import { useNavigate } from "react-router-dom";
@@ -18,10 +18,11 @@ interface Track {
     mbid: string;
 }
 
-function PlaylistMenu({ tracks }: PlaylistProps) {
+function PlaylistMenu({ tracks: initialTracks }: PlaylistProps) {
     const [tracksList, setTracksList] = useState<Track[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [favoriteIds, setFavoriteIds] = useState<string[]>(getFavorites());
     const navigate = useNavigate();
 
     const navigateToTrack = (mbid: string) => {
@@ -29,8 +30,19 @@ function PlaylistMenu({ tracks }: PlaylistProps) {
     };
 
     useEffect(() => {
+        const handleFavoritesUpdate = (event: any) => {
+            const newFavorites = event.detail || getFavorites();
+            setFavoriteIds(newFavorites);
+        };
+
+        window.addEventListener('favoritesUpdated', handleFavoritesUpdate);
+        return () => window.removeEventListener('favoritesUpdated', handleFavoritesUpdate);
+    }, []);
+
+    useEffect(() => {
         const fetchTracks = async () => {
-            if (!tracks || tracks.length === 0) {
+            if (!favoriteIds || favoriteIds.length === 0) {
+                setTracksList([]);
                 setLoading(false);
                 return;
             }
@@ -38,14 +50,14 @@ function PlaylistMenu({ tracks }: PlaylistProps) {
             try {
                 setLoading(true);
                 setError(null);
-                const tracksInfo = [];
+                const tracksInfo: Track[] = [];
 
-                for (let i = 0; i < tracks.length; i++) {
+                for (let i = 0; i < favoriteIds.length; i++) {
                     try {
                         const trackInfoParams = {
                             method: "track.getInfo",
                             api_key: API_KEY,
-                            mbid: tracks[i],
+                            mbid: favoriteIds[i],
                             format: "json",
                         };
 
@@ -53,14 +65,14 @@ function PlaylistMenu({ tracks }: PlaylistProps) {
                         const trackInfo = await fetch(trackInfoUrl);
                         
                         if (!trackInfo.ok) {
-                            console.warn(`Error fetching track ${tracks[i]}: ${trackInfo.status}`);
-                            continue; 
+                            console.warn(`Error fetching track ${favoriteIds[i]}: ${trackInfo.status}`);
+                            continue;
                         }
 
                         const retrievedTrackInfo = await trackInfo.json();
                         
                         if (!retrievedTrackInfo.track) {
-                            console.warn(`No track data found for ${tracks[i]}`);
+                            console.warn(`No track data found for ${favoriteIds[i]}`);
                             continue;
                         }
 
@@ -73,12 +85,12 @@ function PlaylistMenu({ tracks }: PlaylistProps) {
                             image: albumImage,
                             artist: retrievedTrackInfo.track.artist.name,
                             playcount: retrievedTrackInfo.track.playcount || '0',
-                            mbid: retrievedTrackInfo.track.mbid || tracks[i]
+                            mbid: retrievedTrackInfo.track.mbid || favoriteIds[i]
                         };
 
                         tracksInfo.push(mappedTrack);
                     } catch (trackError) {
-                        console.error(`Error processing track ${tracks[i]}:`, trackError);
+                        console.error(`Error processing track ${favoriteIds[i]}:`, trackError);
                         continue;
                     }
                 }
@@ -93,13 +105,21 @@ function PlaylistMenu({ tracks }: PlaylistProps) {
         };
 
         fetchTracks();
-    }, [tracks]);
+    }, [favoriteIds]);
+
+    const handleClearFavorites = () => {
+        clearFavorites();
+    };
 
     if (loading) {
         return (
             <div className="playlist-menu">
+                <div className="playlist-header">
+                    <h3 className="playlist-title">Favoritos</h3>
+                </div>
                 <div className="playlist">
                     <div className="playlist-loading">
+                        <div className="loading-spinner"></div>
                         <p>Cargando tu playlist...</p>
                     </div>
                 </div>
@@ -110,11 +130,14 @@ function PlaylistMenu({ tracks }: PlaylistProps) {
     if (error) {
         return (
             <div className="playlist-menu">
+                <div className="playlist-header">
+                    <h3 className="playlist-title">Favoritos</h3>
+                </div>
                 <div className="playlist">
                     <div className="playlist-error">
                         <p>{error}</p>
                         <button onClick={() => window.location.reload()}>
-                            Reintentar
+                            Ups, algo salió mal. Reintentar
                         </button>
                     </div>
                 </div>
@@ -122,31 +145,45 @@ function PlaylistMenu({ tracks }: PlaylistProps) {
         );
     }
 
-    if (!tracks || tracks.length === 0) {
+    if (favoriteIds.length === 0) {
         return (
             <div className="playlist-menu">
+                <div className="playlist-header">
+                    <h3 className="playlist-title">Favoritos</h3>
+                </div>
                 <div className="playlist">
                     <div className="playlist-empty">
-                        <p>No tienes canciones en tu playlist aún</p>
-                        <p>Agrega algunas canciones a tus favoritos para verlas aquí</p>
+                        <p><br />No tienes canciones favoritas aún</p>
                     </div>
                 </div>
             </div>
         );
     }
+    const trackItemProps = getTrackItemProps(tracksList, navigateToTrack);
+    return (
+        <div className="playlist-menu">
+            <div className="playlist-header">
+                <h3 className="playlist-title">
+                    Favoritos 
+                </h3>
+                <p>({favoriteIds.length})                
+                    <img
+                    className="clear-favorites-btn"
+                    onClick={handleClearFavorites}
+                    title="Limpiar todos los favoritos"
+                    src="src/assets/eliminar.svg"
+                    alt="Limpiar favoritos"
+                    style={{ cursor: 'pointer', width: '1rem', height: '1rem'}}
+                    />
+                </p>
+                </div>            
 
-    if (tracksList.length > 0) {
-        const trackItemProps = getTrackItemProps(tracksList, navigateToTrack);
-        return (
-            <div className="playlist-menu">
-                <div className="playlist">
-                    <Tracklist {...trackItemProps} />
-                </div>
-            </div>
-        );
-    }
+            <div className="playlist">
+                <Tracklist {...trackItemProps} />
+            </div>                
 
-    return null;
+        </div>
+    );
 }
 
 function getTrackItemProps(tracks: Track[], navigate: (mbid: string) => void): TrackListProps {
@@ -154,9 +191,9 @@ function getTrackItemProps(tracks: Track[], navigate: (mbid: string) => void): T
         index: index + 1,
         imageUrl: currentTrack.image,
         name: currentTrack.name,
-        showListeners: false, 
+        trackMbid: currentTrack.mbid,
+        showListeners: false,
         onClick: () => {
-            console.log('Navigating to track:', currentTrack);
             if (currentTrack.mbid && currentTrack.mbid.trim() !== '') {
                 navigate(currentTrack.mbid);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -166,12 +203,10 @@ function getTrackItemProps(tracks: Track[], navigate: (mbid: string) => void): T
         }
     }));
 
-    const trackListProps: TrackListProps = {
+    return {
         trackItemProps: trackItemProps,
-        title: `Favoritos (${trackItemProps.length})`
+        title: "" 
     };
-
-    return trackListProps;
 }
 
 export { PlaylistMenu };

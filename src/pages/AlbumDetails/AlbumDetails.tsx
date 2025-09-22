@@ -5,7 +5,7 @@ import { Header } from "../../components/Header/Header";
 import "./AlbumDetails.css";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { baseUrl, API_KEY } from "../../helpers/constants";
-import { injectParams, updateHistory } from "../../helpers/helper";
+import { injectParams, updateHistory, getFavorites } from "../../helpers/helper";
 import { Tracklist, type TrackListProps } from "../../components/Tracklist/Tracklist";
 import type { TrackItemProps } from "../../components/TrackItem/TrackItem";
 import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
@@ -20,7 +20,7 @@ interface Album {
     tracks: Tracks;
     wiki: Wiki;
     mbid: string;
-    artistMbid?: string; 
+    artistMbid?: string;
 }
 
 interface Image {
@@ -48,9 +48,16 @@ function AlbumDetails() {
     const [album, setAlbum] = useState<Album>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [favorites, setFavorites] = useState(() => getFavorites());
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const query = searchParams.get("q");
+
+    useEffect(() => {
+        const updateFavs = () => setFavorites(getFavorites());
+        window.addEventListener("favoritesUpdated", updateFavs);
+        return () => window.removeEventListener("favoritesUpdated", updateFavs);
+    }, []);
 
     const navigateToTrack = (trackName: string, artistName: string, mbid?: string) => {
         if (mbid && mbid.trim() !== '') {
@@ -253,12 +260,8 @@ function AlbumDetails() {
     const descriptionContent = formatDescription(album.wiki?.content || album.wiki?.summary || '');
     const hasLongContent = descriptionContent.length > 1000;
 
-    const playlist = localStorage.getItem("favorites") != null 
-        ? localStorage.getItem("favorites") 
-        : JSON.stringify({tracks: ['Empty']});
-    const parsedPlaylist = JSON.parse(playlist as string);  
     const playlistMenuProps: PlaylistProps = {
-        tracks: parsedPlaylist
+        tracks: favorites
     };
 
     return (
@@ -293,6 +296,9 @@ function getBasicBannerProps(album: Album, onArtistClick?: () => void): BasicBan
         artist: album.artist,
         name: album.name,
         listeners: album.listeners,
+        mbid: album.mbid,
+        type: "album",
+        showFavoriteButton: false,
         onArtistClick: onArtistClick
     };
 }

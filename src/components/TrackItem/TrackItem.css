@@ -1,6 +1,6 @@
 .track-item {
     display: grid;
-    grid-template-columns: auto auto 1fr auto;
+    grid-template-columns: auto auto 1fr auto auto;
     gap: var(--dl-layout-space-unit);
     align-items: center;
     padding: var(--dl-layout-space-halfunit) var(--dl-layout-space-unit);
@@ -153,8 +153,22 @@
     color: var(--dl-color-primary-500);
 }
 
-.track-item:hover .track-item-listeners {
-    color: var(--dl-color-gray-500);
+.track-item-favorite {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.track-item-favorite-image {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.track-item-favorite-image:hover {
+  transform: scale(1.1);
 }
 
 @media (max-width: 768px) {
