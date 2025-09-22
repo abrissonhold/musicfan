@@ -51,8 +51,10 @@ function Search() {
 
     const navigateToAlbum = (mbid: string) => {
         navigate(`/album?q=${mbid}`);
-    };
-
+    };    
+    const navigateToSeeMore = (query: string, type: string) => {
+        navigate(`/seeMore?q=${query}&type=${type}`);
+    }
     useEffect(() => {
         const fetchTracks = async () => {
             try {
@@ -163,9 +165,9 @@ function Search() {
     }, [query]);
 
     if (artists && albums && tracks) {
-        const tracksGalleryProps = getTracksProps(tracks, navigateToTrack);
-        const albumGaleryProps = getAlbumsProps(albums, navigateToAlbum);
-        const artistGalleryProps = getArtistsProps(artists, navigateToArtist);
+        const tracksGalleryProps = getTracksProps(tracks, navigateToTrack, navigateToSeeMore, query ? query : '', 'track');
+        const albumGaleryProps = getAlbumsProps(albums, navigateToAlbum, navigateToSeeMore, query ? query : '', 'album');
+        const artistGalleryProps = getArtistsProps(artists, navigateToArtist, navigateToSeeMore, query ? query : '', 'artist');
         const playlist = localStorage.getItem("favorites") != null ? localStorage.getItem("favorites") : JSON.stringify({tracks: ['Empty']});
         const parsedPlaylist = JSON.parse(playlist as string);        
         const playlistMenuProps: PlaylistProps = {
@@ -191,7 +193,7 @@ function Search() {
 
 export { Search };
 
-function getArtistsProps(artists: Artist[], navigate: (mbid: string) => void) {
+function getArtistsProps(artists: Artist[], navigate: (mbid: string) => void, seeMore: (query: string, type: string) => void, query: string, type: string) {
     return {
         galleryTitle: "Artistas",
         searchCardPropsArray: artists.map(a => ({
@@ -201,11 +203,12 @@ function getArtistsProps(artists: Artist[], navigate: (mbid: string) => void) {
             listenersAmount: a.listeners,
             onClick: () => navigate(a.mbid),
             mbid: a.mbid,
-        }))
+        })),
+        seeMoreRedirect: () => seeMore(query, type)
     };
 }
 
-function getAlbumsProps(albums: Album[], navigate: (mbid: string) => void) {
+function getAlbumsProps(albums: Album[], navigate: (mbid: string) => void, seeMore: (query: string, type: string) => void, query: string, type: string) {
     return {
         galleryTitle: "Álbumes",
         searchCardPropsArray: albums.map(al => ({
@@ -215,11 +218,12 @@ function getAlbumsProps(albums: Album[], navigate: (mbid: string) => void) {
             subtitle: al.artist,
             onClick: () => navigate(al.mbid),
             mbid: al.mbid
-        }))
+        })),
+        seeMoreRedirect: () => seeMore(query, type)
     };
 }
 
-function getTracksProps(tracks: Track[], navigate: (mbid: string) => void) {
+function getTracksProps(tracks: Track[], navigate: (mbid: string) => void, seeMore: (query: string, type: string) => void, query: string, type: string) {
     return {
         galleryTitle: "Canciones",
         searchCardPropsArray: tracks.map(t => ({
@@ -229,7 +233,8 @@ function getTracksProps(tracks: Track[], navigate: (mbid: string) => void) {
             subtitle: t.artist,
             onClick: () => navigate(t.mbid),
             mbid: t.mbid
-        }))
+        })),
+        seeMoreRedirect: () => seeMore(query, type)
     };
 }
 function injectParams(baseUrl: URL, params: Object) {

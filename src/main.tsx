@@ -9,6 +9,7 @@ import { TrackDetails } from './pages/TrackDetails/TrackDetails.tsx'
 import { AlbumDetails } from './pages/AlbumDetails/AlbumDetails.tsx'
 import { History } from './pages/History/History.tsx'
 import { Landing } from './pages/Landing/Landing.tsx'
+import { SeeMoreSearch } from './pages/SeeMoreSearch/SeeMoreSearch.tsx'
 
 const router = createBrowserRouter([
   { path: '/', element: <Landing />},
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
   { path: '/album', element: <AlbumDetails />},
   { path: '/history', element: <History /> },
   { path: '/index', element: <Index /> },
+  { path: '/seeMore', element: <SeeMoreSearch /> },
 ])
 
 createRoot(document.getElementById('root')!).render(

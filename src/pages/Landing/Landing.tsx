@@ -2,6 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/Header/Header";
 import { Footer } from "../../components/Footer/Footer";
+import 'leaflet/dist/leaflet.css';
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
 import "./Landing.css";
 
 interface Feature {
@@ -136,21 +139,21 @@ function Landing() {
                 <div className="container">
                     <h2 className="section-title">Dónde Estamos</h2>
                     <div className="location-content">
-                        <div className="map-container">
-                            <div className="map-placeholder">
-                                📍
-                            </div>
+                        <div className="map-container">                         
                             <div className="map-attribution">
-                                <p>
-                                    Datos del mapa © {' '}
-                                    <a 
-                                        href="http://www.openstreetmap.org/copyright" 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                    >
-                                        OpenStreetMap
-                                    </a>
-                                </p>
+                                <div style={{ height: "40vh", width: "30vw" }}>
+                                    <MapContainer center={[-34.7747355, -58.2666021]} zoom={13} style={{ height: "100%", width: "100%" }}>
+                                        <TileLayer
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+                                        <Marker position={[-34.7747355, -58.2666021]}>
+                                        <Popup>
+                                            <b>Hello!</b> <br /> This is Buenos Aires.
+                                        </Popup>
+                                        </Marker>
+                                    </MapContainer>
+                                </div>
                             </div>
                         </div>
 
