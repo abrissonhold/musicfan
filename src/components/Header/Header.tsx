@@ -5,21 +5,19 @@ import SearchBar from "../SearchBar/SearchBar";
 interface HeaderProps {
     onLogoClick?: () => void;
     isSearching?: boolean;
+    onFavoritesClick?: () => void; 
 }
 
-function Header({ onLogoClick, isSearching }: HeaderProps) {
-    
+function Header({ onLogoClick, isSearching, onFavoritesClick }: HeaderProps) {
     const handleLogoClick = () => {
         onLogoClick?.();
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: "smooth" });
         window.location.href = "/";
     };
 
     return (
         <header className={`header ${isSearching ? "searching" : ""}`}>
             <nav className="header-nav">
-                {/* Logo */}
                 <div className="logo-container">
                     <img
                         alt="MusicFan Logo"
@@ -37,9 +35,9 @@ function Header({ onLogoClick, isSearching }: HeaderProps) {
                 <div className="logo-container header-actions">
                     <img
                         alt="Icono de Favoritos"
-                        src="src/assets/fav.png"
+                        src="/src/assets/fav.png"
                         className="navbar-image1"
-                        onClick={() => console.log('implementar favoritos')}
+                        onClick={onFavoritesClick}
                     />
                 </div>
             </nav>

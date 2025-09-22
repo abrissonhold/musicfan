@@ -1,9 +1,13 @@
-.gridded-content{
+.gridded-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0vw;
+    grid-template-columns: clamp(15vw, 25%, 20vw) 1fr;
+    align-items: start;
 }
-.main-content{
-    max-width: 80vw;
-    margin-right: 8rem;
+
+@media (max-width: 768px) {
+    .gridded-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
 }

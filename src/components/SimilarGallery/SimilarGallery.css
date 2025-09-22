@@ -1,7 +1,6 @@
 .similar-gallery {
-    max-width: 1200px;
-    margin: 0 auto var(--dl-layout-space-tripleunit) auto;
-    padding: 0 var(--dl-layout-space-unit);
+    margin: 0 1rem var(--dl-layout-space-tripleunit);
+    padding: 0 clamp(1rem, 2vw, 2rem);
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -12,15 +11,6 @@
     position: relative;
 }
 
-/* .similar-gallery::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--dl-gradient-primary);
-    z-index: 1;
-} */
 
 .similar-gallery-header {
     padding: var(--dl-layout-space-doubleunit) var(--dl-layout-space-unit) var(--dl-layout-space-unit);
@@ -42,22 +32,12 @@
     position: relative;
 }
 
-/* .similar-gallery-header-title::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 60%;
-    background: var(--dl-gradient-primary);
-    border-radius: 1px;
-} */
-
 .similar-gallery-body {
     padding: var(--dl-layout-space-doubleunit) var(--dl-layout-space-unit);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--dl-layout-space-unit);
-    align-items: start;
+    align-items: stretch;
 }
 
 .similar-gallery-body .search-card {
@@ -69,27 +49,6 @@
     position: relative;
     overflow: hidden;
 }
-
-/* .similar-gallery-body .search-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(
-        circle at center,
-        rgba(150, 133, 198, 0.1) 0%,
-        transparent 70%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 0;
-} */
-
-/* .similar-gallery-body .search-card:hover::before {
-    opacity: 1;
-} */
 
 .similar-gallery-body .search-card:hover {
     transform: translateY(-8px) scale(1.02);
@@ -207,23 +166,6 @@
     }
 }
 
-.similar-gallery-body .search-card::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: -10px;
-    width: 20px;
-    height: 1px;
-    background: linear-gradient(
-        90deg,
-        rgba(150, 133, 198, 0.5) 0%,
-        transparent 100%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 1;
-}
-
 .similar-gallery-body .search-card:not(:last-child):hover::after {
     opacity: 1;
 }
@@ -238,6 +180,6 @@
 }
 
 .similar-gallery.empty .similar-gallery-body::before {
-    content: 'No se encontraron artistas similares';
+    content: 'No se encontraron similares';
     font-size: 1.1rem;
 }

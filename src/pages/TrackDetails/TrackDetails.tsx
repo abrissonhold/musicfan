@@ -79,7 +79,6 @@ function TrackDetails() {
         navigate('/');
     };
 
-    // Fetch track info
     useEffect(() => {
         if (!query) {
             setError("No se proporcionó un ID de canción válido");
@@ -112,7 +111,6 @@ function TrackDetails() {
                     throw new Error("No se encontró información de la canción");
                 }
                 
-                // Buscar MBID del álbum si está disponible
                 if (trackData?.album?.title && trackData?.album?.artist) {
                     try {
                         const albumSearchParams = {
@@ -142,7 +140,6 @@ function TrackDetails() {
                     }
                 }
 
-                // Actualizar historial
                 const referenceItem: ReferenceItem = {
                     mbid: trackData.mbid,
                     type: "track"
@@ -161,7 +158,6 @@ function TrackDetails() {
         fetchTrack();
     }, [query]);
 
-    // Fetch similar tracks
     useEffect(() => {
         const fetchSimilarTracks = async () => {
             if (!track) return;
@@ -182,7 +178,6 @@ function TrackDetails() {
                 const parsedResponse = await response.json();
                 const similarTracks = parsedResponse.similartracks.track || [];
                 
-                // Get similar tracks images
                 const trackPromises = similarTracks.map(async (currentTrack: SimilarTrack) => {
                     if (!currentTrack.mbid) return currentTrack;
                     
@@ -234,7 +229,6 @@ function TrackDetails() {
             .trim();
     };
 
-    // Estados de carga y error
     if (loading) {
         return (
             <>
@@ -292,7 +286,6 @@ function TrackDetails() {
         );
     }
 
-    // Renderizado principal
     const navigateToArtistHandler = track.artist.mbid 
         ? () => navigateToArtist(track.artist.mbid)
         : undefined;
@@ -309,7 +302,6 @@ function TrackDetails() {
     const hasDescription = descriptionContent.length > 0;
     const hasLongContent = descriptionContent.length > 1000;
     
-    // Playlist configuration
     const playlist = localStorage.getItem("favorites") != null 
         ? localStorage.getItem("favorites") 
         : JSON.stringify({tracks: ['Empty']});
@@ -326,10 +318,8 @@ function TrackDetails() {
                 <div className="main-content">
                     <BasicBanner {...basicBannerProps} />
                     
-                    {/* Información del track */}
                     <section className="track-description">
                         <div className={`track-description-text ${hasLongContent ? 'long-content' : ''}`}>
-                            {/* Información del álbum */}
                             {fromAlbum && (
                                 <div className="track-album-info">
                                     Pertenece al álbum{' '}
@@ -347,7 +337,6 @@ function TrackDetails() {
                                 </div>
                             )}
                             
-                            {/* Descripción de la canción */}
                             {hasDescription ? (
                                 <div className="track-wiki-content">
                                     {descriptionContent}
@@ -360,7 +349,6 @@ function TrackDetails() {
                         </div>                                    
                     </section>
                     
-                    {/* Canciones similares */}
                     {similarTracks.length > 0 && (
                         <SimilarGallery {...similarGalleryProps} />
                     )}

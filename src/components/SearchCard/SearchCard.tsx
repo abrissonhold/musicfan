@@ -49,15 +49,10 @@ function SearchCard({ type, imageUrl, title, subtitle, listenersAmount, mbid, on
       <img className="search-card-image" src={imageUrl} alt={title} onClick={onClick}/>
       <div className="search-card-description">           
        <div className="search-card-description-box">
-          {/* Título principal: depende del tipo */}
           <p className="search-card-title">{title}</p>
-
-          {/* Subtítulo solo para album o track */}
           {(type === "album" || type === "track") && subtitle && (
             <p className="search-card-subtitle">{subtitle}</p>
           )}
-
-          {/* Listeners solo para artista */}
           {type === "artist" && listenersAmount && (
             <p className="search-card-listeners">
               {listenersAmount} oyentes

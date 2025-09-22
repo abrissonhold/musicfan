@@ -1,6 +1,5 @@
 .track-description {
-    max-width: 1200px;
-    margin: 0 auto var(--dl-layout-space-tripleunit) auto;
+    margin: 0 1rem var(--dl-layout-space-tripleunit);
     padding: 0 var(--dl-layout-space-unit);
 }
 
@@ -142,5 +141,108 @@
     }
     100% {
         background-position: 200% 0;
+    }
+}
+
+.track-description {    margin: 0 auto var(--dl-layout-space-tripleunit);
+    padding: 0 clamp(1rem, 2vw, 2rem);
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.track-description-text {
+    font-size: clamp(1rem, 1.1vw + 0.9rem, 1.2rem);
+    line-height: 1.8;
+    text-align: justify;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: var(--dl-layout-radius-cardradius);
+    padding: clamp(1rem, 2vw, 2rem);
+    box-shadow: var(--dl-shadow-card);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.track-description:hover .track-description-text {
+    box-shadow: var(--dl-shadow-card-hover);
+    transform: translateY(-2px);
+}
+
+.track-description-text p {
+    margin-bottom: 1em;
+}
+
+.track-description-text a,
+.track-description-album-link {
+    color: var(--dl-color-primary-400);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(20, 169, 255, 0.3);
+    transition: color 0.3s ease, background 0.3s ease;
+}
+
+.track-description-text a:hover,
+.track-description-album-link:hover {
+    color: var(--dl-color-primary-700);
+    background: rgba(20, 169, 255, 0.12);
+    border-bottom-color: var(--dl-color-primary-700);
+    padding: 2px 4px;
+    border-radius: 4px;
+    margin: -2px -4px;
+}
+
+.track-description-text strong {
+    color: var(--dl-color-gray-white);
+    font-weight: 600;
+}
+
+.track-description-text em {
+    color: var(--dl-color-primary-300);
+    font-style: normal;
+    font-weight: 500;
+}
+
+.track-description-text > br + br {
+    display: block;
+    content: "";
+    margin: var(--dl-layout-space-unit) 0;
+}
+
+.track-description.loading .track-description-text {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.03) 25%,
+        rgba(255, 255, 255, 0.07) 50%,
+        rgba(255, 255, 255, 0.03) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .track-description-text {
+        font-size: clamp(0.95rem, 1vw + 0.8rem, 1.05rem);
+        text-align: left;
+        padding: clamp(0.8rem, 2vw, 1.2rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .track-description {
+        margin-bottom: var(--dl-layout-space-doubleunit);
+        padding: 0 0.75rem;
+    }
+    .track-description-text {
+        font-size: 0.95rem;
+        border-radius: var(--dl-layout-radius-radius4);
+        padding: 0.75rem;
     }
 }

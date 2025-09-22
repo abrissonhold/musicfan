@@ -1,6 +1,6 @@
 .playlist-menu {
     width: 20vw;
-    min-height: 100vh;
+    height: 100%;
     background-color: #050625;
     border-radius: 0.5rem;
 }
