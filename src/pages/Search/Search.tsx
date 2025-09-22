@@ -180,9 +180,9 @@ function Search() {
                     <div className="gridded-content">
                         <PlaylistMenu {...playlistMenuProps}></PlaylistMenu>
                         <div className="main-content">
-                            <SearchCardGallery {...tracksGalleryProps}></SearchCardGallery>
-                            <SearchCardGallery {...albumGaleryProps}></SearchCardGallery>
-                            <SearchCardGallery {...artistGalleryProps}></SearchCardGallery>
+                            {tracksGalleryProps.searchCardPropsArray.length > 0 ? <SearchCardGallery {...tracksGalleryProps}></SearchCardGallery> : <SearchCardGallery galleryTitle="No hay canciones que coincidan con tu búsqueda" searchCardPropsArray={[]}></SearchCardGallery>}
+                            {albumGaleryProps.searchCardPropsArray.length > 0 ? <SearchCardGallery {...albumGaleryProps}></SearchCardGallery> : <SearchCardGallery galleryTitle="No hay álbumes que coincidan con tu búsqueda" searchCardPropsArray={[]}></SearchCardGallery>}
+                            {artistGalleryProps.searchCardPropsArray.length > 0 ? <SearchCardGallery {...artistGalleryProps}></SearchCardGallery> : <SearchCardGallery galleryTitle="No hay artistas que coincidan con tu búsqueda" searchCardPropsArray={[]}></SearchCardGallery>}
                         </div>
                     </div>
                 </div>
