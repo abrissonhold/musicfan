@@ -2,16 +2,18 @@ import { useState } from "react";
 import "./BasicBanner.css";
 import { ShareModal } from "../ShareModal/ShareModal";
 
-interface BasicBannerProps{
+interface BasicBannerProps {
     imageUrl: string;
     artist: string;
     name: string;
     listeners: string;
-    artistMbid?: string; 
-    onArtistClick?: () => void; 
+    artistMbid?: string;
+    onArtistClick?: () => void;
+    isFav?: boolean;
+    onToggleFavorite?: () => void; 
 }
 
-function BasicBanner({imageUrl, artist, name, listeners, artistMbid, onArtistClick}: BasicBannerProps){
+function BasicBanner({ imageUrl, artist, name, listeners, artistMbid, onArtistClick, isFav, onToggleFavorite }: BasicBannerProps) {
     const [open, setOpen] = useState(false);
     const handleArtistClick = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -21,11 +23,11 @@ function BasicBanner({imageUrl, artist, name, listeners, artistMbid, onArtistCli
     };
 
     return (
-        <>  
-            <section className="basic-banner" style={{backgroundImage: imageUrl ? `url(${imageUrl})` : "none"}}>
+        <>
+            <section className="basic-banner" style={{ backgroundImage: imageUrl ? `url(${imageUrl})` : "none" }}>
                 <div className="basic-banner-header">
                     {onArtistClick ? (
-                        <p 
+                        <p
                             className="basic-banner-header-artist basic-banner-header-artist--clickable"
                             onClick={handleArtistClick}
                             title={`Ver perfil de ${artist}`}
@@ -39,15 +41,30 @@ function BasicBanner({imageUrl, artist, name, listeners, artistMbid, onArtistCli
                 </div>
                 <div className="basic-banner-body">
                     <p className="basic-banner-body-listeners">{listeners}</p>
-                    <div>
-                    <button onClick={() => setOpen(true)}>Share</button>
-                        <ShareModal isOpen={open} onClose={() => setOpen(false)}  title={name}/>
+
+                    <div className="basic-banner-actions">
+                        <img
+                            className="basic-banner-fav-icon"
+                            src={isFav ? "/src/assets/fav.png" : "/src/assets/noFav.png"}
+                            alt={isFav ? "Quitar de favoritos" : "Agregar a favoritos"}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onToggleFavorite?.();
+                            }}
+                        />
+
+                        <button onClick={() => setOpen(true)}>Share</button>
+                        <ShareModal isOpen={open} onClose={() => setOpen(false)} title={name} />
                     </div>
+                </div>                    <p className="basic-banner-body-listeners">{listeners}</p>
+                <div>
+                    <button onClick={() => setOpen(true)}>Share</button>
+                    <ShareModal isOpen={open} onClose={() => setOpen(false)} title={name} />
                 </div>
             </section>
         </>
     )
 }
 
-export {BasicBanner};
-export type {BasicBannerProps};
+export { BasicBanner };
+export type { BasicBannerProps };

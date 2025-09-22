@@ -46,7 +46,12 @@ function SearchCard({ type, imageUrl, title, subtitle, listenersAmount, mbid, on
   }, [])
   return (
     <div className="search-card">
-      <img className="search-card-image" src={imageUrl} alt={title} onClick={onClick}/>
+      <img
+        className="search-card-image"
+        src={imageUrl}
+        alt={title}
+        onClick={onClick}
+      />
       <div className="search-card-description">           
        <div className="search-card-description-box">
           <p className="search-card-title">{title}</p>
