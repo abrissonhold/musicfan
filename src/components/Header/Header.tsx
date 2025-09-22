@@ -40,6 +40,16 @@ function Header({ onLogoClick, isSearching, onFavoritesClick }: HeaderProps) {
                         onClick={onFavoritesClick}
                     />
                 </div>
+                <div className="header-history-container">
+                    <img
+                        alt="Icono de Historial"
+                        src="src/assets/historial.svg"
+                        className="navbar-image1"
+                        onClick={() => {
+                            window.location.href = "/history";
+                        }}
+                    />
+                </div>
             </nav>
         </header>
     );

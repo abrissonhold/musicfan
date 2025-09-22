@@ -56,7 +56,7 @@
 }
 
 .navbar-image1 {
-    height: var(--dl-layout-space-tripleunit);
+    height: var(--dl-layout-space-doubleunit);
     width: auto;
     transition: all 0.3s ease;
     filter: drop-shadow(0 2px 8px rgba(150, 133, 198, 0.3));
