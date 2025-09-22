@@ -1,0 +1,12 @@
+.gridded-content {
+    display: grid;
+    grid-template-columns: clamp(15vw, 25%, 20vw) 1fr;
+    align-items: start;
+}
+@media (max-width: 768px) {
+    .gridded-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
+}
