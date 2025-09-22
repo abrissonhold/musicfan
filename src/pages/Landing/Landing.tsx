@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/Header/Header";
 import { Footer } from "../../components/Footer/Footer";
 import "./Landing.css";
+import 'leaflet/dist/leaflet.css';
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 interface Feature {
     title: string;
@@ -56,24 +58,24 @@ function Landing() {
 
     return (
         <div className="landing">
-            <Header 
+            <Header
                 onLogoClick={() => handleScrollTo('inicio')}
             />
             <section id="inicio" className="hero">
                 <div className="hero-content">
                     <h1>Descubre, Evalúa y Comparte Música</h1>
                     <p>
-                        La plataforma definitiva para amantes de la música. Explora millones de canciones, 
+                        La plataforma definitiva para amantes de la música. Explora millones de canciones,
                         álbumes y artistas, lee reseñas auténticas y crea tu propia colección musical.
                     </p>
                     <div className="hero-buttons">
-                        <button 
+                        <button
                             onClick={handleExploreMusic}
                             className="btn-primary"
                         >
                             Comenzar Ahora
                         </button>
-                        <button 
+                        <button
                             onClick={() => handleScrollTo('funciones')}
                             className="btn-secondary"
                         >
@@ -104,17 +106,17 @@ function Landing() {
                         <div className="about-text">
                             <h2>Quiénes Somos</h2>
                             <p>
-                                MusicFan nació de la pasión por conectar a los amantes de la música con las mejores 
-                                reseñas y descubrimientos musicales. Somos un equipo de desarrolladores y melómanos 
+                                MusicFan nació de la pasión por conectar a los amantes de la música con las mejores
+                                reseñas y descubrimientos musicales. Somos un equipo de desarrolladores y melómanos
                                 dedicados a crear la mejor experiencia musical digital.
                             </p>
                             <p>
-                                Nuestra misión es democratizar el acceso a la información musical de calidad, 
-                                proporcionando una plataforma donde tanto críticos profesionales como usuarios 
+                                Nuestra misión es democratizar el acceso a la información musical de calidad,
+                                proporcionando una plataforma donde tanto críticos profesionales como usuarios
                                 apasionados pueden compartir sus perspectivas sobre la música que nos mueve.
                             </p>
                             <p>
-                                Creemos que cada canción tiene una historia que contar, y cada álbum merece ser 
+                                Creemos que cada canción tiene una historia que contar, y cada álbum merece ser
                                 descubierto por las personas adecuadas. Con MusicFan, esa conexión es posible.
                             </p>
                         </div>
@@ -137,20 +139,20 @@ function Landing() {
                     <h2 className="section-title">Dónde Estamos</h2>
                     <div className="location-content">
                         <div className="map-container">
-                            <div className="map-placeholder">
-                                📍
-                            </div>
                             <div className="map-attribution">
-                                <p>
-                                    Datos del mapa © {' '}
-                                    <a 
-                                        href="http://www.openstreetmap.org/copyright" 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                    >
-                                        OpenStreetMap
-                                    </a>
-                                </p>
+                                <div style={{ height: "40vh", width: "30vw" }}>
+                                    <MapContainer center={[-34.7747355, -58.2666021]} zoom={13} style={{ height: "100%", width: "100%" }}>
+                                        <TileLayer
+                                            attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors'
+                                            url="https://{s}.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+                                        />
+                                        <Marker position={[-34.7747355, -58.2666021]}>
+                                            <Popup>
+                                                <b>Hola</b> <br /> Estamos en la UNAJ.
+                                            </Popup>
+                                        </Marker>
+                                    </MapContainer>
+                                </div>
                             </div>
                         </div>
 
@@ -162,13 +164,13 @@ function Landing() {
                                 <p>Calchaqui 6200</p>
                                 <p>Florencio Varela (1888)</p>
                                 <p>Buenos Aires, Argentina</p>
-                                
+
                                 <div className="contact-hours">
                                     <p><strong>Horarios de Atención:</strong></p>
                                     <p>Lunes a Viernes: 9:00 - 22:00</p>
                                     <p>Sábados: 09:00 - 18:00</p>
                                 </div>
-                                
+
                                 <div className="contact-info">
                                     <p><strong>Contacto:</strong></p>
                                     <p>Email: contacto@musicfan.com</p>
