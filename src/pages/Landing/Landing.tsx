@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/Header/Header";
 import { Footer } from "../../components/Footer/Footer";
+import "./Landing.css";
+import L from "leaflet";
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
@@ -92,7 +94,6 @@ function Landing() {
                     <div className="features-grid">
                         {features.map((feature, index) => (
                             <div key={index} className="feature-card">
-                                <span className="feature-icon">{feature.icon}</span>
                                 <h3>{feature.title}</h3>
                                 <p>{feature.description}</p>
                             </div>
