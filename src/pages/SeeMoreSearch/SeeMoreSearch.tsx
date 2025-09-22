@@ -17,11 +17,13 @@ interface ResultItem {
 
 function SeeMoreSearch(){
     const [items, setItems] = useState<Array<ResultItem>>([]);
+    const [currentPage, setCurrentPage] = useState(1);
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q");
     const type = searchParams.get("type");
     const navigate = useNavigate();
-
+    const PageSize = 10;
+    
     const navigateToArtist = (mbid: string) => {
         navigate(`/artist?q=${mbid}`);
     };
@@ -93,15 +95,20 @@ function SeeMoreSearch(){
         trackItemProps: [],
         title: ""
     };
+    let startIndex = (currentPage - 1) * PageSize;
+    let slicedItems;
     switch(type){
         case "artist":
-            itemListProps = getTracklistProps(items, navigateToArtist);
+            slicedItems = items.slice(startIndex, startIndex + PageSize);
+            itemListProps = getTracklistProps(slicedItems, navigateToArtist, startIndex);            
             break;
         case "album":
-            itemListProps = getTracklistProps(items, navigateToAlbum);
+            slicedItems = items.slice(startIndex, startIndex + PageSize);
+            itemListProps = getTracklistProps(slicedItems, navigateToAlbum, startIndex);
             break;
         case "track":
-            itemListProps = getTracklistProps(items, navigateToTrack);
+            slicedItems = items.slice(startIndex, startIndex + PageSize);
+            itemListProps = getTracklistProps(slicedItems, navigateToTrack, startIndex);
             break;
     }
     
@@ -113,6 +120,10 @@ function SeeMoreSearch(){
                     <PlaylistMenu {...playlistMenuProps}></PlaylistMenu>
                     <div className="main-content">
                         <Tracklist {...itemListProps}></Tracklist>
+                        <div className="pagination">
+                            {(items.length > (currentPage * PageSize)) ? <button onClick={() => setCurrentPage(currentPage + 1)}>Siguiente</button>: ''}
+                            {currentPage > 1 ? <button onClick={() => setCurrentPage(currentPage - 1)}>Anterior</button> : ''}                                                   
+                        </div>
                     </div>
                 </div>
             </div>
@@ -120,10 +131,10 @@ function SeeMoreSearch(){
     )
 }
 
-function getTracklistProps(items: Array<ResultItem>, navigate: (mbid: string) => void): TrackListProps {    
+function getTracklistProps(items: Array<ResultItem>, navigate: (mbid: string) => void, startIndex: number): TrackListProps {    
 
     const listItemProps: Array<TrackItemProps> = items.map((currentItem: ResultItem, index: number) => ({
-        index: index + 1,
+        index: startIndex + index + 1,
         imageUrl: currentItem.image,
         name: currentItem.name,
         listeners: currentItem.playcount, 
