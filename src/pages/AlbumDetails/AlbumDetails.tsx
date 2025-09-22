@@ -59,6 +59,7 @@ function AlbumDetails() {
         } else {
             const searchQuery = `${trackName} ${artistName}`;
             navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
 
