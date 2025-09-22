@@ -6,6 +6,8 @@ import "./Landing.css";
 import L from "leaflet";
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
+import "./Landing.css";
 
 interface Feature {
     title: string;

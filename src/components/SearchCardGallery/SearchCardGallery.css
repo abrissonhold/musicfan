@@ -6,6 +6,11 @@
     min-height: 320px;
 }
 
+.card-search-gallery-header{
+    display: flex;
+    justify-content: space-between;
+}
+
 .card-search-gallery-header-title {
     font-size: 2rem;
     font-family: "Inter", sans-serif;
@@ -14,6 +19,7 @@
 
 
 .card-search-gallery-body {
+    min-width: 80vw;
     width: 100%;
     display: flex;
     gap: 2rem;
