@@ -141,7 +141,7 @@ function Landing() {
                     <div className="location-content">
                         <div className="map-container">
                             <div className="map-attribution">
-                                <div style={{ height: "40vh", width: "30vw" }}>
+                                <div style={{ height: "100%", width: "100%" }}>
                                     <MapContainer center={[-34.7747355, -58.2666021]} zoom={13} style={{ height: "100%", width: "100%" }}>
                                         <TileLayer
                                             attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors'
