@@ -17,8 +17,8 @@ function Card({imageUrl, artistName, songName, listenersAmount, onClick}: CardPr
         >
             <img className="card-image" src={imageUrl} alt="" />
             <div className="card-description">
-                <p className="card-description-artist">{artistName}</p>
-                <p className="card-description-song-name">{songName}</p>
+                <p className="card-description-artist">{songName}</p>
+                <p className="card-description-song-name">{artistName}</p>
                 <p className="card-description-listeners-amount">{listenersAmount}</p>
             </div>
         </div>

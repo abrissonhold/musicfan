@@ -1,12 +1,12 @@
 .peek {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;  
-    align-items: center;      
+    justify-content: space-between;
+    align-items: center;
 }
 
 .peek-image {
-    width: 24vw;
+    width: 12vw;
     height: auto;
     aspect-ratio: 1 / 1;
     object-fit: cover;
@@ -30,4 +30,29 @@
 
 .peek-description-description {
     color: var(--dl-color-gray-700);
+}
+
+@media (max-width: 768px) {
+    .peek-image {
+        width: 24vw;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+}
+
+@media (max-width: 425px) {
+    .peek-image {
+        width: 75vw;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+
+    .peek-description-title {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .peek-description-description {
+        font-size: medium;
+    }
 }
