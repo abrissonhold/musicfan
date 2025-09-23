@@ -185,7 +185,7 @@ function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: Play
         );
     }
 
-    if (favoriteIds.length == 0|| favoriteIds == null) {
+    if (favoriteIds.length == 0 || favoriteIds == null) {
         return (
             <div className={menuClasses}>
                 <div className="playlist-header">
@@ -223,13 +223,16 @@ function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: Play
             <div className="playlist">
                 <Tracklist {...trackItemProps} />
             </div>
-                    <img
-                        src="src/assets/eliminar.svg"
-                        alt="Limpiar favoritos"
-                        className="clear-favorites-btn"
-                        onClick={handleClearFavorites}
-                        title="Limpiar todos los favoritos"
-                    />
+            <div className="borrar">
+                <img
+                    src="src/assets/eliminar.svg"
+                    alt="Limpiar favoritos"
+                    className="clear-favorites-btn"
+                    onClick={handleClearFavorites}
+                    title="Limpiar todos los favoritos"
+                />
+            </div>
+
         </div>
     );
 }
