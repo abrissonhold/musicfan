@@ -141,9 +141,9 @@ function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: Play
         isMobile && !isVisible ? 'playlist-menu--hidden' : ''
     ].filter(Boolean).join(' ');
 
-    if (loading) {
+    if (!isMobile && loading) {
         return (
-            <div className={menuClasses}>
+            <div className={menuClasses} >
                 <div className="playlist-header">
                     <h3 className="playlist-title">Favoritos</h3>
                     {isMobile && (
@@ -158,7 +158,7 @@ function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: Play
                         <p>Cargando tu playlist...</p>
                     </div>
                 </div>
-            </div>
+            </div >
         );
     }
 

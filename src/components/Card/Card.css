@@ -52,7 +52,7 @@
     padding-top: 0.25rem;
 }
 
-/* @media (max-width: 1600px) {
+ @media (max-width: 1600px) {
     .galeria-phone-songs {
         display: none;
     }
@@ -72,9 +72,9 @@
         padding: 0;
         margin-top: 1rem;
     }
-} */
+} 
 
-/* @media (max-width: 1200px) {
+@media (max-width: 1200px) {
     .galeria-phone-songs {
         display: none;
     }
@@ -94,12 +94,12 @@
     .card-description-song-name {
         font-size: 1rem;
     }
-}  */
+}
 
 @media (max-width: 480px){
     .card{
         width: 80vw;
-        height: 50vh;
+        height: auto;
     }    
     .card-image{
         width: 70vw;
