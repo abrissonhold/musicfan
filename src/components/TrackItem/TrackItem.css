@@ -178,7 +178,7 @@
         padding: var(--dl-layout-space-halfunit);
     }
     .track-item:not(:has(.track-item-listeners)) {
-        grid-template-columns: auto auto 1fr;
+        grid-template-columns: auto auto 1fr auto;
     }
     .track-item-image {
         width: 40px;
