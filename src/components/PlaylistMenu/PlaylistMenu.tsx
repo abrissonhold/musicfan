@@ -30,7 +30,7 @@ function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: Play
 
     useEffect(() => {
         const checkScreenSize = () => {
-            setIsMobile(window.innerWidth <= 480);
+            setIsMobile(window.innerWidth <= 768);
         };
 
         checkScreenSize();
@@ -141,11 +141,14 @@ function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: Play
         isMobile && !isVisible ? 'playlist-menu--hidden' : ''
     ].filter(Boolean).join(' ');
 
-    if (!isMobile && loading) {
+    if (isMobile && !isVisible) {
+        return null;
+    }
+
+    if (loading) {
         return (
-            <div className={menuClasses} >
+            <div className={menuClasses}>
                 <div className="playlist-header">
-                    <h3 className="playlist-title">Favoritos</h3>
                     {isMobile && (
                         <button className="playlist-close-btn" onClick={handleClose}>
                             ×
@@ -158,7 +161,7 @@ function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: Play
                         <p>Cargando tu playlist...</p>
                     </div>
                 </div>
-            </div >
+            </div>
         );
     }
 
@@ -166,7 +169,6 @@ function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: Play
         return (
             <div className={menuClasses}>
                 <div className="playlist-header">
-                    <h3 className="playlist-title">Favoritos</h3>
                     {isMobile && (
                         <button className="playlist-close-btn" onClick={handleClose}>
                             ×
@@ -189,7 +191,6 @@ function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: Play
         return (
             <div className={menuClasses}>
                 <div className="playlist-header">
-                    <h3 className="playlist-title">Favoritos</h3>
                     {isMobile && (
                         <button className="playlist-close-btn" onClick={handleClose}>
                             ×
@@ -208,32 +209,38 @@ function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: Play
     const trackItemProps = getTrackItemProps(tracksList, navigateToTrack);
 
     return (
-        <div className={menuClasses}>
-            <div className="playlist-header">
-                <div className="playlist-title-container">
-
-                </div>
-                {isMobile && (
-                    <button className="playlist-close-btn" onClick={handleClose}>
-                        ×
-                    </button>
-                )}
-            </div>
-
-            <div className="playlist">
-                <Tracklist {...trackItemProps} />
-            </div>
-            <div className="borrar">
-                <img
-                    src="src/assets/eliminar.svg"
-                    alt="Limpiar favoritos"
-                    className="clear-favorites-btn"
-                    onClick={handleClearFavorites}
-                    title="Limpiar todos los favoritos"
+        <>
+            {isMobile && isVisible && (
+                <div 
+                    className="playlist-overlay"
+                    onClick={handleClose}
                 />
-            </div>
+            )}
+            
+            <div className={menuClasses}>
+                <div className="playlist-header">
+                    {isMobile && (
+                        <button className="playlist-close-btn" onClick={handleClose}>
+                            ×
+                        </button>
+                    )}
+                </div>
 
-        </div>
+                <div className="playlist">
+                    <Tracklist {...trackItemProps} />
+                </div>
+                
+                <div className="borrar">
+                    <img
+                        src="src/assets/eliminar.svg"
+                        alt="Limpiar favoritos"
+                        className="clear-favorites-btn"
+                        onClick={handleClearFavorites}
+                        title="Limpiar todos los favoritos"
+                    />
+                </div>
+            </div>
+        </>
     );
 }
 

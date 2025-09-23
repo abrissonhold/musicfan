@@ -10,7 +10,7 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid var(--dl-color-theme-accent1);
-    border-radius: var(--dl-layout-radius-radius8);    
+    border-radius: var(--dl-layout-radius-radius8);
 }
 
 .card:hover {
@@ -26,22 +26,28 @@
     aspect-ratio: 1 / 1;
     overflow: auto;
     width: fit-content;
+    height: 100%;
 }
 
 .card-description {
+    height: 50%;    
     padding-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
 }
 
 .card-description-artist {
     color: var(--dl-color-gray-white);
-    align-self: flex-start;    
+    align-self: flex-start;
     font-weight: 400;
     font-size: 1.5rem;
 }
 
 .card-description-song-name {
-    font-size: 1rem;  
-    font-weight: 300;  
+    font-size: 1rem;
+    font-weight: 300;
 }
 
 .card-description-listeners-amount {
@@ -52,7 +58,7 @@
     padding-top: 0.25rem;
 }
 
- @media (max-width: 1600px) {
+@media (max-width: 1600px) {
     .galeria-phone-songs {
         display: none;
     }
@@ -72,7 +78,7 @@
         padding: 0;
         margin-top: 1rem;
     }
-} 
+}
 
 @media (max-width: 1200px) {
     .galeria-phone-songs {
@@ -96,12 +102,13 @@
     }
 }
 
-@media (max-width: 480px){
-    .card{
+@media (max-width: 480px) {
+    .card {
         width: 80vw;
         height: auto;
-    }    
-    .card-image{
+    }
+
+    .card-image {
         width: 70vw;
     }
 }
