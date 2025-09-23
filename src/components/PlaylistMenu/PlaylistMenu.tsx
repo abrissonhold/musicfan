@@ -185,7 +185,7 @@ function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: Play
         );
     }
 
-    if (favoriteIds.length === 0) {
+    if (favoriteIds.length == 0|| favoriteIds == null) {
         return (
             <div className={menuClasses}>
                 <div className="playlist-header">

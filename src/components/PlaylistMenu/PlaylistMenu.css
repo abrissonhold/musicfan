@@ -33,3 +33,28 @@
     transition: transform 0.3s ease-in-out;
     z-index: 1000;
 }
+
+
+.playlist-header {
+    padding: var(--dl-layout-space-doubleunit) var(--dl-layout-space-unit) var(--dl-layout-space-unit);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.playlist-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    font-family: 'Bricolage Grotesque', var(--dl-font-family-primary);
+    color: var(--dl-color-gray-white);
+    margin: 0;
+    background: var(--dl-gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+    position: relative;
+}
+
+.playlist-empty{
+    margin: 1rem;
+}
