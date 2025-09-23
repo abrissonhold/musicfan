@@ -108,7 +108,7 @@ function getTracklistProps(items: HistoryItem[]){
                 break;
         }
         const trackItemProp: TrackItemProps = {
-            index: index,
+            index: index+1,
             imageUrl: currentItem.image,
             name: currentItem.name,
             onClick: () => navigateCB(currentItem.mbid)
