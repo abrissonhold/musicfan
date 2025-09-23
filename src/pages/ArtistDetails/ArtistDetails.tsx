@@ -399,6 +399,9 @@ function getTracklistProps(topTracks: Array<Track>, navigate: (mbid: string) => 
         imageUrl: currentTrack.image,
         name: currentTrack.name,
         listeners: currentTrack.listeners,
+        trackMbid: currentTrack.mbid,
+        showListeners: true,
+        showFavoriteButton: true,
         onClick: () => {
             if (currentTrack.mbid && currentTrack.mbid.trim() !== '') {
                 navigate(currentTrack.mbid);

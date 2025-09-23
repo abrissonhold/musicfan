@@ -97,17 +97,17 @@ function AlbumDetails() {
                     format: 'json',
                     mbid: query,
                 };
-                
+
                 const albumUrl = injectParams(baseUrl, albumParams);
                 const response = await fetch(albumUrl);
-                
+
                 if (!response.ok) {
                     throw new Error(`Error HTTP: ${response.status}`);
                 }
-                
+
                 const parsedResponse = await response.json();
                 const albumData = parsedResponse.album;
-                
+
                 if (!albumData) {
                     throw new Error("No se encontró información del álbum");
                 }
@@ -123,7 +123,7 @@ function AlbumDetails() {
                         };
                         const artistSearchUrl = injectParams(baseUrl, artistSearchParams);
                         const artistSearchResponse = await fetch(artistSearchUrl);
-                        
+
                         if (artistSearchResponse.ok) {
                             const artistSearchData = await artistSearchResponse.json();
                             const foundArtist = artistSearchData?.results?.artistmatches?.artist?.[0];
@@ -149,7 +149,7 @@ function AlbumDetails() {
                             };
                             const trackSearchUrl = injectParams(baseUrl, trackSearchParams);
                             const trackSearchResponse = await fetch(trackSearchUrl);
-                            
+
                             if (trackSearchResponse.ok) {
                                 const trackSearchData = await trackSearchResponse.json();
                                 const foundTrack = trackSearchData?.results?.trackmatches?.track?.[0];
@@ -171,7 +171,7 @@ function AlbumDetails() {
                     type: "album"
                 };
                 updateHistory(referenceItem);
-                
+
                 setAlbum(albumData);
             } catch (e) {
                 console.error("Fetching Error: ", e);
@@ -186,10 +186,10 @@ function AlbumDetails() {
 
     const formatDescription = (content: string): string => {
         if (!content) return "";
-        
+
         return content
-            .replace(/<[^>]*>/g, '') 
-            .replace(/\n\s*\n/g, '\n\n') 
+            .replace(/<[^>]*>/g, '')
+            .replace(/\n\s*\n/g, '\n\n')
             .trim();
     };
 
@@ -227,7 +227,7 @@ function AlbumDetails() {
                             <div className="album-description-text">
                                 {error || "No se pudo cargar la información del álbum"}
                                 <br />
-                                <button 
+                                <button
                                     onClick={handleBackToHome}
                                     style={{
                                         marginTop: '1rem',
@@ -253,10 +253,10 @@ function AlbumDetails() {
     const navigateToArtistHandler = album.artistMbid !== undefined
         ? () => navigateToArtist(album.artistMbid as string)
         : undefined;
-        
+
     const basicBannerProps = getBasicBannerProps(album, navigateToArtistHandler);
     const tracklistProps = getTracklistProps(album, navigateToTrack);
-    
+
     const descriptionContent = formatDescription(album.wiki?.content || album.wiki?.summary || '');
     const hasLongContent = descriptionContent.length > 1000;
 
@@ -290,7 +290,7 @@ function AlbumDetails() {
 
 function getBasicBannerProps(album: Album, onArtistClick?: () => void): BasicBannerProps {
     const defaultImage = 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
-    
+
     return {
         imageUrl: album.image?.[3]?.['#text'] || album.image?.[2]?.['#text'] || defaultImage,
         artist: album.artist,
@@ -304,7 +304,7 @@ function getBasicBannerProps(album: Album, onArtistClick?: () => void): BasicBan
 }
 
 function getTracklistProps(
-    album: Album, 
+    album: Album,
     navigateToTrack: (trackName: string, artistName: string, mbid?: string) => void
 ): TrackListProps {
     if (!album.tracks?.track || !Array.isArray(album.tracks.track)) {
@@ -322,9 +322,14 @@ function getTracklistProps(
         imageUrl: albumImage,
         name: currentTrack.name,
         listeners: String(currentTrack.duration || '0'),
+        trackMbid: currentTrack.mbid,
+        artist: album.artist,
+        isFavorite: currentTrack.mbid ? getFavorites().includes(currentTrack.mbid) : false,
+        showFavoriteButton: true,
+        showListeners: true,
         onClick: () => navigateToTrack(currentTrack.name, album.artist, currentTrack.mbid)
     }));
-    
+
     return {
         trackItemProps: trackItemProps,
         title: `Canciones del álbum (${trackItemProps.length})`
