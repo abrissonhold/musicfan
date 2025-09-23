@@ -36,5 +36,23 @@
     padding-top: var(--dl-layout-space-halfunit);
     padding-bottom: var(--dl-layout-space-halfunit);
     color: var(--dl-color-gray-white);
-    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .peek-gallery-body {
+        overflow-x: auto;
+        justify-content: flex-start;
+        gap: 1rem;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .peek-gallery-body::-webkit-scrollbar {
+        display: none;
+    }
+
+    .peek-gallery-body {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 }

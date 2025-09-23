@@ -50,6 +50,23 @@
     margin-top: 1rem;   
 }
 
+@media (max-width: 768px) {
+    .card-gallery-body {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .card-gallery-body::-webkit-scrollbar {
+        display: none;
+    }
+
+    .card-gallery-body {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
 .galeria-phone-songs {
     flex: 0 0 auto;
     display: none;
