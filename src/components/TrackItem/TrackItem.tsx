@@ -48,9 +48,10 @@ function TrackItem({index, imageUrl, name, listeners, onClick, showListeners = t
     return (
         <div className="track-item" onClick={onClick}>
             <p className="track-item-index">{index}</p>
-            <img src={imageUrl} alt="" className="track-item-image" />
-            <p className="track-item-name">{name}</p>
-
+            <div className="track-item-data">
+                <img src={imageUrl} alt="" className="track-item-image" />
+                <p className="track-item-name">{name}</p>
+            </div>        
             {showListeners && listeners && (
                 <p className="track-item-listeners">{listeners}</p>
             )}

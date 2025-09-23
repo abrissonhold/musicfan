@@ -199,6 +199,11 @@
 }
 
 @media (max-width: 480px) {
+    .gridded-content{
+        /* max-width: 98vw; */
+        margin: 0;
+        padding: 0;
+    }
     .album-description {
         margin-bottom: var(--dl-layout-space-unit);
     }

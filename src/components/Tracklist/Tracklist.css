@@ -109,4 +109,7 @@
     .tracklist-header {
         padding: var(--dl-layout-space-halfunit) var(--dl-layout-space-unit);
     }
+    .tracklist-header-title{
+        font-size: xx-large;
+    }
 }

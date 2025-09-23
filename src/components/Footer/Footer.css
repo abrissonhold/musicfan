@@ -5,6 +5,11 @@
     justify-content: center;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 1%, #000 100%);
 }
+@media (max-width: 480px){
+    .footer-container{
+        max-width: 99vw;
+    }
+}
 
 .footer-max-width {
     display: flex;

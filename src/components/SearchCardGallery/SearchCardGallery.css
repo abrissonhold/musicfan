@@ -39,3 +39,28 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+@media (max-width: 768px) {
+    
+}
+
+@media (max-width: 480px) {    
+    .card-search-gallery{
+        display: flex;
+        flex-direction: column;
+    }
+    .card-search-gallery-body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    .card-search-gallery-header{
+        justify-content: space-between;
+        align-items: center;        
+    }
+    .card-search-gallery-header-btn{
+        width: 25vw;
+        align-self: center;
+        margin-top: 1rem;
+    }
+}

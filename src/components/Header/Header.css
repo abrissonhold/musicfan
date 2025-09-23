@@ -9,8 +9,13 @@
     z-index: 1000;
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(150, 133, 198, 0.2);
+    max-width: 99vw;
 }
-
+@media (max-width: 480px){
+    .header{
+        max-width: 99vw;
+    }
+}
 .header::before {
     content: '';
     position: absolute;

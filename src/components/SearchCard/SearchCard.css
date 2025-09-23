@@ -140,7 +140,32 @@
     aspect-ratio: 1 / 1;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {    
+    
+}
+
+@media (max-width: 480px) {   
+    .search-card{
+        width: 65vw;
+    }
+    .search-card-description-box{
+        margin-left: 0.5rem;
+    }
+    .search-card-title{
+        font-size: x-large;
+    }
+    .search-card-subtitle{
+        font-size: large;
+    }  
+    .search-card-listeners{
+        font-size: large;
+    }
+    .search-card-description-favorites-image{
+        width: 7vw;
+    }
+}
+
+/* @media (max-width: 900px) {
     .search-card {
         flex: 0 0 45%;
         min-height: 260px;
@@ -170,4 +195,4 @@
     .search-card-description-favorites-image {
         width: 0.9rem;
     }
-}
+} */

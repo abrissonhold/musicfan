@@ -3,6 +3,9 @@
     grid-template-columns: clamp(15vw, 25%, 20vw) 1fr;
     align-items: start;
 }
+.main-content{
+    max-width: 99vw;
+}
 @media (max-width: 768px) {
     .gridded-content {
         grid-template-columns: 1fr;

@@ -12,7 +12,7 @@ function SearchCardGallery({ searchCardPropsArray, galleryTitle, seeMoreRedirect
             <section className="card-search-gallery">
                 <div className="card-search-gallery-header">
                     <p className="card-search-gallery-header-title">{galleryTitle}</p>
-                    <button onClick={seeMoreRedirect}>Ver mas</button>
+                    <button className="card-search-gallery-header-btn" onClick={seeMoreRedirect}>Ver mas</button>
                 </div>
                 <div className="card-search-gallery-body">
                     {searchCardPropsArray.map((item: SearchCardProps, index: number) => <SearchCard {...item} key={index}></SearchCard>)}

@@ -1,3 +1,6 @@
+.main-content{
+    max-width: 99vw;
+}
 .track-description {
     margin: 0 1rem var(--dl-layout-space-tripleunit);
     padding: 0 var(--dl-layout-space-unit);
