@@ -173,7 +173,7 @@
 
 @media (max-width: 768px) {
     .track-item {
-        grid-template-columns: auto auto 1fr auto;
+        grid-template-columns: auto auto 1fr auto auto;
         gap: var(--dl-layout-space-halfunit);
         padding: var(--dl-layout-space-halfunit);
     }
