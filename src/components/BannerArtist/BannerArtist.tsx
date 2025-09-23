@@ -1,22 +1,31 @@
 import { useState } from "react";
 import { ShareModal } from "../ShareModal/ShareModal";
 import "./BannerArtist.css"
-interface BannerArtistProps{
+interface BannerArtistProps {
     imageUrl: string;
     name: string;
     listeners: string;
 }
-function BannerArtist({imageUrl, name, listeners}: BannerArtistProps){
+function BannerArtist({ imageUrl, name, listeners }: BannerArtistProps) {
     const [open, setOpen] = useState(false);
     return (
         <>
-            <section className="banner-artist" style={{backgroundImage: imageUrl ? `url(${imageUrl})` : "none"}}>
-                <h1 className="banner-artist-name">{name}</h1>
+            <section className="banner-artist" style={{ backgroundImage: imageUrl ? `url(${imageUrl})` : "none" }}>
                 <div className="banner-artist-body">
+                    <div className="basic-banner-header">
+                        <p className="basic-banner-header-name">{name}</p>
+                    </div>
                     <p className="banner-artist-body-listeners">{listeners} oyentes</p>
-                    <div>
-                    <button onClick={() => setOpen(true)}>Share</button>
-                        <ShareModal isOpen={open} onClose={() => setOpen(false)}  title={name}/>
+                    <div className="banner-artist-actions">
+                        <button
+                            className="basic-banner-share-btn"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setOpen(true);
+                            }}
+                            title={`Compartir "${name}"`}
+                        >   Compartir
+                        </button>
                     </div>
                 </div>
             </section>
@@ -24,6 +33,6 @@ function BannerArtist({imageUrl, name, listeners}: BannerArtistProps){
     )
 };
 
-export {BannerArtist};
-export type {BannerArtistProps};
+export { BannerArtist };
+export type { BannerArtistProps };
 
