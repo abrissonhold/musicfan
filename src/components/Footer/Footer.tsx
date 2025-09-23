@@ -1,21 +1,14 @@
 import "./Footer.css";
 import React from "react";
+import { Link } from "react-router-dom";
 
 type FooterProps = {
   columnTitle?: string;
-  link1?: string;
-  link2?: string;
-  link3?: string;
-  link4?: string;
   copyright?: string;
 };
 
 const Footer: React.FC<FooterProps> = ({
   columnTitle = "Explore",
-  link1 = "Éxitos",
-  link2 = "Tus Favs",
-  link3 = "Géneros",
-  link4 = "Artistas",
   copyright = "© 2025 MusicFan. All Rights Reserved."
 }) => {
   return (
@@ -26,18 +19,8 @@ const Footer: React.FC<FooterProps> = ({
             <div className="footer-column">
               <strong className="footer-column-title">{columnTitle}</strong>
               <div className="footer-column-links">
-                <a href="index.html" target="_blank">
-                  {link1}
-                </a>
-                <a href="index.html" target="_blank">
-                  {link2}
-                </a>
-                <a href="index.html" target="_blank">
-                  {link3}
-                </a>
-                <a href="index.html" target="_blank">
-                  {link4}
-                </a>
+                <Link to="/index">Éxitos</Link>
+                <Link to="/history">Historial</Link>
               </div>
             </div>
           </div>
