@@ -364,8 +364,8 @@ function ArtistDetails() {
                     <BannerArtist {...bannerArtistProps} />
                     
                     {descriptionContent && (
-                        <section className="artist-description">
-                            <div className={`artist-description-text ${hasLongContent ? 'long-content' : ''}`}>
+                        <section className="album-description">
+                            <div className={`album-description-text ${hasLongContent ? 'long-content' : ''}`}>
                                 {descriptionContent}
                             </div>
                         </section>

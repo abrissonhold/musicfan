@@ -9,7 +9,5 @@
 @media (max-width: 768px) {
     .gridded-content {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 0 1rem;
     }
 }

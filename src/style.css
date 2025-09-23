@@ -11,17 +11,17 @@
     --dl-color-danger-300: #A22020;
     --dl-color-danger-500: #BF2626;
     --dl-color-danger-700: #E14747;
-    
+
     --dl-color-primary-100: #00318cff;
     --dl-color-primary-300: #0074F0;
     --dl-color-primary-500: #14A9FF;
     --dl-color-primary-700: #78d7fdff;
     --dl-color-primary-900: #baebffff;
-    
+
     --dl-color-success-300: #199033;
     --dl-color-success-500: #32A94C;
     --dl-color-success-700: #4CC366;
-    
+
     --dl-color-theme-accent1: #4c4e82;
     --dl-color-theme-accent2: #392b67;
     --dl-color-theme-primary1: #9685C6;
@@ -30,7 +30,7 @@
     --dl-color-theme-secondary2: #E2AFAA;
     --dl-color-theme-neutral-dark: #FFFFFF;
     --dl-color-theme-neutral-light: #080A45;
-    
+
     --dl-layout-size-unit: 1rem;
     --dl-layout-space-unit: 1rem;
     --dl-layout-size-halfunit: 0.5rem;
@@ -47,14 +47,14 @@
     --dl-layout-radius-imageradius: 8px;
     --dl-layout-radius-inputradius: 24px;
     --dl-layout-radius-buttonradius: 24px;
-    
+
     --dl-shadow-card: 0 4px 15px rgba(0, 0, 0, 0.3);
     --dl-shadow-card-hover: 0 8px 25px rgba(5, 6, 37, 0.4);
     --dl-shadow-button: 0 2px 8px rgba(0, 0, 0, 0.2);
     --dl-gradient-primary: linear-gradient(145deg, var(--dl-color-theme-primary1), var(--dl-color-theme-primary2));
     --dl-gradient-card: linear-gradient(145deg, #0a0a0a, #1a1a1a);
     --dl-gradient-card-hover: linear-gradient(145deg, #050625, #0f0f2a);
-    
+
     font-family: 'Inter', 'Roboto', system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 300;
@@ -62,7 +62,7 @@
     color-scheme: light dark;
     color: rgba(255, 255, 255, 0.87);
     background-color: var(--dl-color-theme-neutral-light);
-    
+
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -85,7 +85,7 @@ body {
     min-width: 320px;
     min-height: 100vh;
     background-color: var(--dl-color-theme-neutral-light);
-    background-image: 
+    background-image:
         radial-gradient(circle at 25% 25%, rgba(150, 133, 198, 0.1) 0%, transparent 50%),
         radial-gradient(circle at 75% 75%, rgba(76, 78, 130, 0.1) 0%, transparent 50%);
     background-attachment: fixed;
@@ -192,7 +192,9 @@ button:disabled {
     box-shadow: 0 4px 15px rgba(191, 38, 38, 0.3);
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
     border-radius: var(--dl-layout-radius-inputradius);
     border: 2px solid var(--dl-color-gray-700);
     background-color: rgba(255, 255, 255, 0.05);
@@ -204,14 +206,17 @@ input, textarea, select {
     backdrop-filter: blur(10px);
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
     outline: none;
     border-color: var(--dl-color-primary-500);
     box-shadow: 0 0 0 3px rgba(20, 169, 255, 0.2);
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-input::placeholder, textarea::placeholder {
+input::placeholder,
+textarea::placeholder {
     color: var(--dl-color-gray-700);
 }
 
@@ -233,19 +238,38 @@ input::placeholder, textarea::placeholder {
     color: var(--dl-color-theme-primary1);
 }
 
-.mb-1 { margin-bottom: var(--dl-layout-space-unit); }
-.mb-2 { margin-bottom: var(--dl-layout-space-doubleunit); }
-.mb-3 { margin-bottom: var(--dl-layout-space-tripleunit); }
+.mb-1 {
+    margin-bottom: var(--dl-layout-space-unit);
+}
 
-.mt-1 { margin-top: var(--dl-layout-space-unit); }
-.mt-2 { margin-top: var(--dl-layout-space-doubleunit); }
-.mt-3 { margin-top: var(--dl-layout-space-tripleunit); }
+.mb-2 {
+    margin-bottom: var(--dl-layout-space-doubleunit);
+}
+
+.mb-3 {
+    margin-bottom: var(--dl-layout-space-tripleunit);
+}
+
+.mt-1 {
+    margin-top: var(--dl-layout-space-unit);
+}
+
+.mt-2 {
+    margin-top: var(--dl-layout-space-doubleunit);
+}
+
+.mt-3 {
+    margin-top: var(--dl-layout-space-tripleunit);
+}
 
 
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
     }
+
     50% {
         opacity: 0.5;
     }
@@ -280,14 +304,30 @@ html {
     :root {
         font-size: 14px;
     }
-    
+
     body {
-        padding: 0 var(--dl-layout-space-halfunit);
+        padding: 0;
     }
-    
+
     button {
         padding: 0.75em 1.5em;
         font-size: 0.9em;
+    }
+
+    ::-webkit-scrollbar {
+        width: 0;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: none;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 0;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: none;
     }
 }
 
@@ -295,11 +335,11 @@ html {
     :root {
         font-size: 13px;
     }
-    
+
     h1 {
         font-size: clamp(1.75rem, 8vw, 2.5rem);
     }
-    
+
     button {
         padding: 0.8em 1.6em;
         width: 100%;

@@ -144,10 +144,7 @@
     .similar-gallery-body .search-card:hover {
         transform: translateY(-4px) scale(1.01);
     }
-}
-
-@media (max-width: 480px) {
-    .similar-gallery {
+        .similar-gallery {
         margin-bottom: var(--dl-layout-space-unit);
         border-radius: 0;
     }
@@ -160,7 +157,7 @@
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
+        -webkit-overflow-scrolling: auto;
         padding: 1rem;
         gap: 1rem;
     }
@@ -170,7 +167,9 @@
     }
 
     .similar-gallery-body::-webkit-scrollbar {
-        display: none;
+        display: block;
+        width: 10px;
+        
     }
 
     .similar-gallery-body {

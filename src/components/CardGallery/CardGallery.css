@@ -52,18 +52,25 @@
 
 @media (max-width: 768px) {
     .card-gallery-body {
+        display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
+        -webkit-overflow-scrolling: auto;
+        padding: 1rem;
+        gap: 1rem;
     }
 
-    .card-gallery-body::-webkit-scrollbar {
-        display: none;
+    .similar-gallery-body .card-gallery {
+        flex: 0 0 200px;
     }
 
-    .card-gallery-body {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+    .card-gallery::-webkit-scrollbar {
+        display:block;
+    }
+
+    .card-gallery {
+        -ms-overflow-style: none;  
+        scrollbar-width: none;  
     }
 }
 

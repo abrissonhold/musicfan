@@ -200,7 +200,6 @@
 
 @media (max-width: 480px) {
     .gridded-content{
-        /* max-width: 98vw; */
         margin: 0;
         padding: 0;
     }
