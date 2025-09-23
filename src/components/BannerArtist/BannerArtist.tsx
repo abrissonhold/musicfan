@@ -31,6 +31,7 @@ function BannerArtist({ imageUrl, name, listeners }: BannerArtistProps) {
 
                 </div>
             </section>
+            <ShareModal isOpen={open} onClose={() => setOpen(false)} title={name}/>
         </>
     )
 };
