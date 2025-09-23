@@ -15,18 +15,20 @@ function BannerArtist({ imageUrl, name, listeners }: BannerArtistProps) {
                     <div className="basic-banner-header">
                         <p className="basic-banner-header-name">{name}</p>
                     </div>
-                    <p className="banner-artist-body-listeners">{listeners} oyentes</p>
-                    <div className="banner-artist-actions">
-                        <button
-                            className="basic-banner-share-btn"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setOpen(true);
-                            }}
-                            title={`Compartir "${name}"`}
-                        >   Compartir
-                        </button>
-                    </div>
+                    <div>
+                        <p className="banner-artist-body-listeners">{listeners} oyentes</p>
+                        <div className="banner-artist-actions">
+                            <button
+                                className="basic-banner-share-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setOpen(true);
+                                }}
+                                title={`Compartir "${name}"`}
+                            >   Compartir
+                            </button>
+                        </div></div>
+
                 </div>
             </section>
         </>
