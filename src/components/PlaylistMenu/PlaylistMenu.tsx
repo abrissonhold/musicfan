@@ -254,7 +254,7 @@ function getTrackItemProps(tracks: Track[], navigate: (mbid: string) => void): T
 
     return {
         trackItemProps: trackItemProps,
-        title: `Favoritos (${tracks.length})`
+        title: `Favoritos`
     };
 }
 

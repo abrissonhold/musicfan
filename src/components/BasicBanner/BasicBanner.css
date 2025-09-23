@@ -208,7 +208,7 @@
     }
     
     .basic-banner-actions {
-        justify-content: center;
+        justify-content: end;
         flex-wrap: wrap;
     }
     

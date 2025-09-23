@@ -11,6 +11,8 @@ interface ShareModalProps {
 
 function ShareModal({ isOpen, onClose, url, title }: ShareModalProps) {
   const [email, setEmail] = useState("");
+  const [pbody, setpbody] = useState("");
+
   const pageUrl =
     url ?? (typeof window !== "undefined" ? window.location.href : "");
   const pageTitle =
@@ -34,14 +36,13 @@ function ShareModal({ isOpen, onClose, url, title }: ShareModalProps) {
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
-  
+
   const sendEmail = () => {
     if (!email) {
-      alert("Please enter an email address");
       return;
     }
     const subject = encodeURIComponent(`Check this page: ${pageTitle}`);
-    const body = encodeURIComponent(`Hi,\n\nI wanted to share this page with you:\n${pageUrl}`);
+    const body = encodeURIComponent(`Hi,\n\nI wanted to share this page with you:\n${pageUrl} ${pbody}`);
     window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
   };
 
@@ -54,32 +55,38 @@ function ShareModal({ isOpen, onClose, url, title }: ShareModalProps) {
         aria-labelledby="share-modal-title"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 id="share-modal-title" className="modal__title">
+        <div className="modal__actions">        
+          <h2 id="share-modal-title" className="modal__title">
           {pageTitle}
         </h2>
-        
+        </div>
         <div className="modal-email">
-          <input
-            type="email"
-            placeholder="Enter email address"
-            className="modal__input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />         
-          <button className="modal-email-button" onClick={sendEmail}>
+          <div>
+            <input
+              type="email"
+              placeholder="Enter email address"
+              className="modal__input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="body"
+              placeholder="Enter body text"
+              className="modal__input"
+              value={pbody}
+              onChange={(e) => setpbody(e.target.value)}
+            />          
+            <button className="button" onClick={sendEmail}>
             Send Email
           </button>
+          </div>
         </div>
 
-        <div className="modal__actions">                
-          <button className="button" onClick={onClose}>
-            Close
-          </button>
-        </div>
+
       </div>
     </div>,
     document.body
   );
 };
 
-export {ShareModal}
+export { ShareModal }

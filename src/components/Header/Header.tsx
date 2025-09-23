@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
 import SearchBar from "../SearchBar/SearchBar";
+import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
 
 interface HeaderProps {
     onLogoClick?: () => void;
@@ -60,6 +61,10 @@ function Header({ onLogoClick, isSearching, onToggleSidebar }: HeaderProps) {
         onToggleSidebar?.(false);
     };
 
+    const playlist = localStorage.getItem("favorites") || '{"tracks":["Empty"]}';
+    const parsedPlaylist = JSON.parse(playlist);
+    const playlistMenuProps: PlaylistProps = { tracks: parsedPlaylist };
+
     return (
         <>
             <header className={`header ${isSearching ? "searching" : ""}`}>
@@ -112,7 +117,7 @@ function Header({ onLogoClick, isSearching, onToggleSidebar }: HeaderProps) {
                         zIndex: 999,
                         backdropFilter: 'blur(2px)'
                     }}
-                />
+                />          
             )}
             {isMobile && (
                 <div
@@ -134,17 +139,17 @@ function Header({ onLogoClick, isSearching, onToggleSidebar }: HeaderProps) {
                         padding: '20px'
                     }}
                 >
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '20px',
-                        paddingBottom: '15px',
-                        borderBottom: '1px solid rgba(150, 133, 198, 0.2)'
-                    }}>
-                        <h3 style={{ color: 'white', margin: 0, fontSize: '1.2rem' }}>
-                            Favoritos
-                        </h3>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '20px',
+                            paddingBottom: '15px',
+                            borderBottom: '1px solid rgba(150, 133, 198, 0.2)'
+                        }}>
+                        <PlaylistMenu {...playlistMenuProps} />
+
                         <button
                             onClick={handleOverlayClick}
                             style={{
@@ -172,14 +177,8 @@ function Header({ onLogoClick, isSearching, onToggleSidebar }: HeaderProps) {
                         </button>
                     </div>
 
-                    <div style={{
-                        flex: 1,
-                        overflow: 'auto',
-                        color: 'white'
-                    }}>
-                        <p style={{ textAlign: 'center', opacity: 0.7 }}>
-                            No tienes canciones favoritas aún
-                        </p>
+                    <div>
+                        <PlaylistMenu {...playlistMenuProps} />
                     </div>
                 </div>
             )}

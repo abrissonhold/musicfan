@@ -199,10 +199,6 @@
         height: 40px;
         font-size: 1rem;
     }
-
-    .header-actions .favorites-btn {
-        display: none;
-    }
 }
 
 @media (max-width: 480px) {

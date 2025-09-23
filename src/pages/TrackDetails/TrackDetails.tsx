@@ -80,7 +80,6 @@ function TrackDetails() {
         navigate("/");
     };
 
-    // ✅ Toggle favorito
     const handleFavoriteToggle = () => {
         if (!track?.mbid) return;
         const favs = JSON.parse(localStorage.getItem("favorites") || '{"tracks":[]}');
@@ -124,7 +123,6 @@ function TrackDetails() {
 
                 if (!trackData) throw new Error("No se encontró información de la canción");
 
-                // Buscar mbid de álbum
                 if (trackData?.album?.title && trackData?.album?.artist) {
                     try {
                         const albumSearchParams = {
@@ -167,7 +165,6 @@ function TrackDetails() {
         fetchTrack();
     }, [query]);
 
-    // Sincronizar favorito
     useEffect(() => {
         if (track?.mbid) {
             const favs = JSON.parse(localStorage.getItem("favorites") || '{"tracks":[]}');
@@ -373,7 +370,7 @@ function getSimilarGalleryProps(
         mbid: t.mbid,
     }));
 
-    return { similarCardProps: searchCardProps, title: `Canciones Similares (${searchCardProps.length})` };
+    return { similarCardProps: searchCardProps, title: `Canciones Similares` };
 }
 
 export { TrackDetails };

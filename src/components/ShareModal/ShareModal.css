@@ -40,31 +40,6 @@
   justify-content: center;
 }
 
-.modal__button {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background: #f5f5f5;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.modal__button:hover {
-  background: #eaeaea;
-}
-
-.modal__close {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background: #eee;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.modal__close:hover {
-  background: #ddd;
-}
 .modal-email {
   display: flex;
   justify-content: center;
@@ -78,6 +53,10 @@
   width: 8vw;
   height: 4vh;
   margin-top: 0.5rem;
+}
+
+.button{
+  margin-top: 1rem;
 }
 /* .modal-email .modal-input {
   flex: 1;
