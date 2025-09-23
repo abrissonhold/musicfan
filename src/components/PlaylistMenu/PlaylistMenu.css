@@ -64,7 +64,7 @@
 }
 
 @media (max-width: 768px) {
-    .playlist-overlay, .playlist-menu--visible, .playlist-menu--visible {
+ .playlist-menu--visible, .playlist-menu--visible {
     width: 20vw;
     height: 100%;
     background-color: #050625;
@@ -89,4 +89,5 @@
     z-index: 1000;
     flex-wrap: wrap;
     }
+
 }

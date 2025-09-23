@@ -20,7 +20,7 @@ interface Track {
     mbid: string;
 }
 
-function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: PlaylistProps) {
+function PlaylistMenu({ tracks: initialTracks, isVisible, onClose }: PlaylistProps) {
     const [tracksList, setTracksList] = useState<Track[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
