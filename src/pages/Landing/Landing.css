@@ -13,8 +13,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    
 }
 
+.hero {
+  position: relative;
+  background: url('src/assets/2000.jpg') center/cover no-repeat;
+  color: white;
+  padding: 6rem 1rem;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.726); 
+}
+.hero-content {
+  position: relative; 
+}
 .hero-content {
     max-width: 800px;
     margin: 0 auto;
