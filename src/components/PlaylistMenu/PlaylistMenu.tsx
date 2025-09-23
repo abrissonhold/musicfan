@@ -30,7 +30,7 @@ function PlaylistMenu({ tracks: initialTracks, isVisible = true, onClose }: Play
 
     useEffect(() => {
         const checkScreenSize = () => {
-            setIsMobile(window.innerWidth <= 768);
+            setIsMobile(window.innerWidth <= 480);
         };
 
         checkScreenSize();
