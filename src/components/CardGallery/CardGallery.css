@@ -1,5 +1,5 @@
 .card-gallery {
-    /* height: auto; */
+    height: auto;
     /* display: flex; */
     /* overflow: auto; */
     /* position: relative; */
@@ -43,11 +43,11 @@
 }
 
 .card-gallery-body {
-    min-height: 40vh;
+    min-height: 30vh;
     /* width: 100%; */
     display: flex;
     gap: 2rem;
-    margin-top: 1rem;   
+    margin-top: 1rem;
 }
 
 @media (max-width: 768px) {
@@ -65,15 +65,16 @@
     }
 
     .card-gallery::-webkit-scrollbar {
-        display:block;
+        display: block;
     }
 
     .card-gallery {
-        -ms-overflow-style: none;  
-        scrollbar-width: none;  
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
 }
-@media (max-width: 480px){  
+
+@media (max-width: 480px) {
     .card-gallery-body {
         display: flex;
         align-items: center;
@@ -81,17 +82,16 @@
         justify-content: center;
         padding: 1rem;
         gap: 1rem;
-        /* overflow-x: auto; */
-        /* overflow-y: hidden; */
         scroll-behavior: smooth;
         scroll-snap-type: x mandatory;
-    } 
+    }
+
     .card-gallery-body::-webkit-scrollbar {
         display: none;
     }
 }
 
-/* .galeria-phone-songs {
+.galeria-phone-songs {
     flex: 0 0 auto;
     display: none;
     align-items: flex-start;
@@ -122,4 +122,4 @@
     align-self: flex-start;
     padding-top: 0.25rem;
     padding-left: 1rem;
-} */
+} 
