@@ -1,8 +1,8 @@
 .card-gallery {
     /* height: auto; */
-    display: flex;
-    overflow: auto;
-    position: relative;
+    /* display: flex; */
+    /* overflow: auto; */
+    /* position: relative; */
     align-items: center;
     flex-direction: column;
     justify-content: center;
@@ -44,7 +44,7 @@
 
 .card-gallery-body {
     min-height: 40vh;
-    width: 100%;
+    /* width: 100%; */
     display: flex;
     gap: 2rem;
     margin-top: 1rem;   
@@ -53,7 +53,7 @@
 @media (max-width: 768px) {
     .card-gallery-body {
         display: flex;
-        overflow-x: auto;
+        /* overflow-x: auto; */
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: auto;
         padding: 1rem;
@@ -73,8 +73,25 @@
         scrollbar-width: none;  
     }
 }
+@media (max-width: 480px){  
+    .card-gallery-body {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        padding: 1rem;
+        gap: 1rem;
+        /* overflow-x: auto; */
+        /* overflow-y: hidden; */
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+    } 
+    .card-gallery-body::-webkit-scrollbar {
+        display: none;
+    }
+}
 
-.galeria-phone-songs {
+/* .galeria-phone-songs {
     flex: 0 0 auto;
     display: none;
     align-items: flex-start;
@@ -105,4 +122,4 @@
     align-self: flex-start;
     padding-top: 0.25rem;
     padding-left: 1rem;
-}
+} */
