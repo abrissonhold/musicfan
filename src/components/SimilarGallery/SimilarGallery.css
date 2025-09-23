@@ -157,8 +157,25 @@
     }
     
     .similar-gallery-body {
-        grid-template-columns: repeat(2, 1fr);
-        padding: var(--dl-layout-space-halfunit) var(--dl-layout-space-unit);
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .similar-gallery-body .search-card {
+        flex: 0 0 200px;
+    }
+
+    .similar-gallery-body::-webkit-scrollbar {
+        display: none;
+    }
+
+    .similar-gallery-body {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
     
     .similar-gallery-body .search-card:hover {

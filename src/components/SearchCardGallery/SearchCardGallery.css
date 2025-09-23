@@ -52,7 +52,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-direction: column;
     }
     .card-search-gallery-header{
         justify-content: space-between;
