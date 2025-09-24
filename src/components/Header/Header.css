@@ -9,7 +9,7 @@
     z-index: 1000;
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(150, 133, 198, 0.2);
-    max-width: 99vw;
+    max-width: 100vw;
 }
 
 .header::before {
