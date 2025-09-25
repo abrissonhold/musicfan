@@ -142,10 +142,10 @@ function Landing() {
                         <div className="map-container">
                             <div className="map-attribution">
                                 <div style={{ height: "100%", width: "100%" }}>
-                                    <MapContainer center={[-34.7747355, -58.2666021]} zoom={13} style={{ height: "100%", width: "100%" }}>
+                                    <MapContainer center={[-34.7747355, -58.2666021]} zoom={13} scrollWheelZoom={false}>
                                         <TileLayer
-                                            attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a> contributors'
-                                            url="https://{s}.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                         />
                                         <Marker position={[-34.7747355, -58.2666021]}>
                                             <Popup>
