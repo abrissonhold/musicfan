@@ -9,7 +9,7 @@ import { baseUrl, API_KEY } from "../../helpers/constants";
 import { injectParams, updateHistory } from "../../helpers/helper";
 import type { SearchCardProps } from "../../components/SearchCard/SearchCard";
 import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
-import type { ReferenceItem } from "../History/History";
+import type { HistoryItem } from "../History/History";
 
 interface Track {
     artist: Artist;
@@ -151,8 +151,12 @@ function TrackDetails() {
                     }
                 }
 
-                const referenceItem: ReferenceItem = { mbid: trackData.mbid, type: "track" };
-                updateHistory(referenceItem);
+                const historyItem: HistoryItem = {
+                    name: trackData.name,
+                    image: trackData.album.image[3]["#text"] || trackData.album.image[2]?.["#text"],
+                    mbid: trackData.mbid,
+                }
+                updateHistory(historyItem);
                 setTrack(trackData);
             } catch (e) {
                 console.error("Fetching Error: ", e);

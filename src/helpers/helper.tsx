@@ -1,4 +1,4 @@
-import type { ReferenceItem } from "../pages/History/History";
+import type { HistoryItem } from "../pages/History/History";
 
 function injectParams(baseUrl: URL, params: Object) {
   const newUrl = new URL(baseUrl.toString());
@@ -10,20 +10,18 @@ function injectParams(baseUrl: URL, params: Object) {
   return newUrl;
 }
 
-function updateHistory(referenceItem: ReferenceItem) {
+function updateHistory(historyItem: HistoryItem) {
   const referenceItems = localStorage.getItem("history");
-  let parsedReferenceItems: Array<ReferenceItem> = JSON.parse(
+  let parsedHistoryItem: Array<HistoryItem> = JSON.parse(
     referenceItems as string
   );
-  if (!parsedReferenceItems) parsedReferenceItems = [];
-  if (
-    !parsedReferenceItems.some(
-      (currentReferenceItem: ReferenceItem) =>
-        currentReferenceItem.mbid === referenceItem.mbid
-    )
-  ) {
-    parsedReferenceItems.push(referenceItem);
-    localStorage.setItem("history", JSON.stringify(parsedReferenceItems));
+  if (!parsedHistoryItem) parsedHistoryItem = [];
+  if (!parsedHistoryItem.some((currentHistoryItem: HistoryItem) => currentHistoryItem.mbid === historyItem.mbid)) {
+    if(parsedHistoryItem.length >= 9){
+      parsedHistoryItem.splice(9);
+    }
+    parsedHistoryItem.unshift(historyItem);
+    localStorage.setItem("history", JSON.stringify(parsedHistoryItem));
   }
 }
 

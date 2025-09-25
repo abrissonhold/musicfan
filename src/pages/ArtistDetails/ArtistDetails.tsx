@@ -6,12 +6,11 @@ import { Tracklist, type TrackListProps } from "../../components/Tracklist/Track
 import { SimilarGallery, type SimilarGalleryProps } from "../../components/SimilarGallery/SimilarGallery";
 import { useEffect, useState } from "react";
 import { baseUrl, API_KEY } from "../../helpers/constants";
-import { injectParams, updateHistory } from "../../helpers/helper";
+import { injectParams } from "../../helpers/helper";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import type { TrackItemProps } from "../../components/TrackItem/TrackItem";
 import type { SearchCardProps } from "../../components/SearchCard/SearchCard";
 import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
-import type { ReferenceItem } from "../History/History";
 
 interface ArtistResponse {
     name: string;
@@ -129,13 +128,7 @@ function ArtistDetails() {
                 } catch (e) {
                     console.warn('Could not fetch artist image from top albums', e);
                 }
-
-                const referenceItem: ReferenceItem = {
-                    mbid: artistInfo.mbid,
-                    type: "artist"
-                };
-                updateHistory(referenceItem);
-                
+                                
                 setArtist(artistInfo);
             } catch (e) {
                 console.error('Fetching Artist Data Error: ', e);
