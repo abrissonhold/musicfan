@@ -102,13 +102,53 @@
     }
 }
 
+@media (max-width: 768px) {
+    .card {
+        display: flex;
+        flex-direction: column;
+    }
+    .card-image {
+        width: 15vw;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+    .card-description {
+        height: 40%;
+        padding-left: 0.5rem;
+        padding-bottom: 0.5rem;
+        position: relative;
+        justify-content: bottom;
+    }
+    .card-description-artist {
+        font-size: 1.5rem;
+    }
+    .card-description-song-name {
+        font-size: 1.2rem;
+    }
+    .card-description-listeners-amount {
+        font-size: 0.9rem;
+    }
+}
+
 @media (max-width: 480px) {
     .card {
-        width: 80vw;
+        width: 90vw;
         height: auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
 
     .card-image {
-        width: 70vw;
+        width: 30vw;
+        height: 30vw;
+        aspect-ratio: 1 / 1;
+        padding: 1rem;
+        margin: 0;
+    }
+    .card-description-artist {
+        font-size: 2rem;
+        padding: 0;
+        margin-top: 0;
     }
 }

@@ -3,6 +3,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .peek-image {
@@ -42,14 +43,19 @@
 
 @media (max-width: 425px) {
     .peek-image {
-        width: 75vw;
+        width: 40vw;
         height: auto;
         aspect-ratio: 1 / 1;
     }
+    .peek-description {
+        align-items: center;
+        gap: 0;
+    }   
 
     .peek-description-title {
-        font-size: 2rem;
+        font-size: 1.5rem;
         font-weight: bold;
+        align-items: center;
     }
 
     .peek-description-description {

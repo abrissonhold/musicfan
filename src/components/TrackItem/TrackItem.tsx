@@ -9,11 +9,11 @@ interface TrackItemProps {
     listeners?: string;
     onClick: () => void;
     showListeners?: boolean;
-    showFavoriteButton?: boolean;
+    showFavoriteButton?: true;
     trackMbid?: string;
 }
 
-function TrackItem({index, imageUrl, name, listeners, onClick, showListeners = true, showFavoriteButton = true, trackMbid}: TrackItemProps) {
+function TrackItem({index, imageUrl, name, listeners, onClick, showListeners = true, showFavoriteButton, trackMbid}: TrackItemProps) {
     const [isFav, setIsFav] = useState<boolean>(false);
 
     useEffect(() => {

@@ -11,6 +11,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import type { TrackItemProps } from "../../components/TrackItem/TrackItem";
 import type { SearchCardProps } from "../../components/SearchCard/SearchCard";
 import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
+import { useIsMobile } from "../../helpers/useIsMobile";
 
 interface ArtistResponse {
     name: string;
@@ -59,7 +60,13 @@ function ArtistDetails() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const query = searchParams.get("q");
-    
+    const isMobile = useIsMobile();
+    const [isPlaylistVisible, setIsPlaylistVisible] = useState(false);
+
+    const handleTogglePlaylist = () => {
+        setIsPlaylistVisible(prev => !prev);
+    };
+
     const navigateToTrack = (mbid: string) => {
         navigate(`/track?q=${mbid}`);
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -94,14 +101,14 @@ function ArtistDetails() {
                 };
                 const artistInfoUrl = injectParams(baseUrl, artistInfoParams);
                 const response = await fetch(artistInfoUrl);
-                
+
                 if (!response.ok) {
                     throw new Error(`Error HTTP: ${response.status}`);
                 }
-                
+
                 const parsedResponse = await response.json();
                 const artistInfo = parsedResponse.artist;
-                
+
                 if (!artistInfo) {
                     throw new Error("No se encontró información del artista");
                 }
@@ -117,7 +124,7 @@ function ArtistDetails() {
                     };
                     const artistTopAlbumsUrl = injectParams(baseUrl, artistTopAlbumsParams);
                     const responseArtist = await fetch(artistTopAlbumsUrl);
-                    
+
                     if (responseArtist.ok) {
                         const artistTopAlbumsResponse = await responseArtist.json();
                         const topAlbumImage = artistTopAlbumsResponse.topalbums?.album[0]?.image[2]['#text'];
@@ -128,7 +135,7 @@ function ArtistDetails() {
                 } catch (e) {
                     console.warn('Could not fetch artist image from top albums', e);
                 }
-                                
+
                 setArtist(artistInfo);
             } catch (e) {
                 console.error('Fetching Artist Data Error: ', e);
@@ -137,14 +144,14 @@ function ArtistDetails() {
                 setLoading(false);
             }
         };
-        
+
         fetchArtist();
     }, [query]);
 
     useEffect(() => {
         const fetchTopTracks = async () => {
             if (!artist) return;
-            
+
             try {
                 const artistTopTracksParams = {
                     method: 'artist.gettoptracks',
@@ -155,15 +162,15 @@ function ArtistDetails() {
                 };
                 const artistTopTracksUrl = injectParams(baseUrl, artistTopTracksParams);
                 const response = await fetch(artistTopTracksUrl);
-                
+
                 if (!response.ok) throw new Error('Network Error');
-                
+
                 const parsedResponse = await response.json();
                 const topTracks = parsedResponse.toptracks.track || [];
-                
+
                 const trackPromises = topTracks.map(async (currentTrack: Track) => {
                     if (!currentTrack.mbid) return currentTrack;
-                    
+
                     try {
                         const trackInfoParams = {
                             method: 'track.getInfo',
@@ -173,11 +180,11 @@ function ArtistDetails() {
                         };
                         const trackInfoUrl = injectParams(baseUrl, trackInfoParams);
                         const trackInfo = await fetch(trackInfoUrl);
-                        
+
                         if (trackInfo.ok) {
                             const retrievedTrackInfo = await trackInfo.json();
                             currentTrack.image = retrievedTrackInfo?.track?.album?.image[3]['#text'] ||
-                                               'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
+                                'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
                         } else {
                             currentTrack.image = 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
                         }
@@ -185,28 +192,28 @@ function ArtistDetails() {
                         console.warn(`Could not fetch image for track: ${currentTrack.name}`, e);
                         currentTrack.image = 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
                     }
-                    
+
                     return currentTrack;
                 });
-                
+
                 const tracksWithImages = await Promise.allSettled(trackPromises);
                 const resolvedTracks = tracksWithImages
                     .filter(result => result.status === 'fulfilled')
                     .map(result => (result as PromiseFulfilledResult<Track>).value);
-                
+
                 setTopTracks(resolvedTracks);
             } catch (e) {
                 console.error('Fetching top tracks error: ', e);
             }
         };
-        
+
         fetchTopTracks();
     }, [artist]);
 
     useEffect(() => {
         const fetchSimilarArtist = async () => {
             if (!artist) return;
-            
+
             try {
                 const similarArtistParams = {
                     method: 'artist.getsimilar',
@@ -217,15 +224,15 @@ function ArtistDetails() {
                 };
                 const similarArtistUrl = injectParams(baseUrl, similarArtistParams);
                 const response = await fetch(similarArtistUrl);
-                
+
                 if (!response.ok) throw new Error('Network Error');
-                
+
                 const parsedResponse = await response.json();
                 const similarArtists = parsedResponse.similarartists.artist || [];
-                
+
                 const artistPromises = similarArtists.map(async (currentArtist: SimilarArtist) => {
                     if (!currentArtist.mbid) return currentArtist;
-                    
+
                     try {
                         const artistTopAlbumsParams = {
                             method: 'artist.gettopalbums',
@@ -236,11 +243,11 @@ function ArtistDetails() {
                         };
                         const artistTopAlbumsUrl = injectParams(baseUrl, artistTopAlbumsParams);
                         const responseArtist = await fetch(artistTopAlbumsUrl);
-                        
+
                         if (responseArtist.ok) {
                             const artistTopAlbumsResponse = await responseArtist.json();
                             currentArtist.image = artistTopAlbumsResponse.topalbums?.album[0]?.image[2]['#text'] ||
-                                                 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
+                                'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
                         } else {
                             currentArtist.image = 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
                         }
@@ -248,38 +255,43 @@ function ArtistDetails() {
                         console.warn(`Could not fetch image for artist: ${currentArtist.name}`, e);
                         currentArtist.image = 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
                     }
-                    
+
                     return currentArtist;
                 });
-                
+
                 const artistsWithImages = await Promise.allSettled(artistPromises);
                 const resolvedArtists = artistsWithImages
                     .filter(result => result.status === 'fulfilled')
                     .map(result => (result as PromiseFulfilledResult<SimilarArtist>).value);
-                
+
                 setSimilarArtists(resolvedArtists);
             } catch (e) {
                 console.error('Fetching similar artists error: ', e);
             }
         };
-        
+
         fetchSimilarArtist();
     }, [artist]);
 
     const formatDescription = (content: string): string => {
         if (!content) return "";
-        
+
         return content
-            .replace(/<[^>]*>/g, '') 
-            .replace(/\n\s*\n/g, '\n\n') 
+            .replace(/<[^>]*>/g, '')
+            .replace(/\n\s*\n/g, '\n\n')
             .trim();
     };
 
-    // Estados de carga y error
     if (loading) {
         return (
             <>
-                <Header isSearching={true} onLogoClick={handleBackToHome} />
+                <Header
+                    isSearching={true}
+                    onLogoClick={handleBackToHome}
+                    isMobile={isMobile}
+                    isPlaylistVisible={isPlaylistVisible}
+                    onTogglePlaylist={handleTogglePlaylist}
+                />
                 <div className="gridded-content">
                     <div className="playlist-loading">
                         <p>Cargando playlist...</p>
@@ -300,7 +312,12 @@ function ArtistDetails() {
     if (error || !artist) {
         return (
             <>
-                <Header onLogoClick={handleBackToHome} />
+                <Header
+                    onLogoClick={handleBackToHome}
+                    isMobile={isMobile}
+                    isPlaylistVisible={isPlaylistVisible}
+                    onTogglePlaylist={handleTogglePlaylist}
+                />
                 <div className="gridded-content">
                     <div className="playlist-loading">
                         <p>Error en playlist</p>
@@ -310,7 +327,7 @@ function ArtistDetails() {
                             <div className="artist-description-text">
                                 {error || "No se pudo cargar la información del artista"}
                                 <br />
-                                <button 
+                                <button
                                     onClick={handleBackToHome}
                                     style={{
                                         marginTop: '1rem',
@@ -336,26 +353,34 @@ function ArtistDetails() {
     const bannerArtistProps = getBannerArtistProps(artist);
     const tracklistProps = getTracklistProps(topTracks, navigateToTrack);
     const similarArtistProps = getSimilarGalleryProps(similarArtists, navigateToArtist);
-    
+
     const descriptionContent = formatDescription(artist.bio?.content || artist.bio?.summary || '');
     const hasLongContent = descriptionContent.length > 1000;
-    
-    const playlist = localStorage.getItem("favorites") != null 
-        ? localStorage.getItem("favorites") 
-        : JSON.stringify({tracks: ['Empty']});
+
+    const playlist = localStorage.getItem("favorites") != null
+        ? localStorage.getItem("favorites")
+        : JSON.stringify({ tracks: ['Empty'] });
     const parsedPlaylist = JSON.parse(playlist as string);
     const playlistMenuProps: PlaylistProps = {
-        tracks: parsedPlaylist
+        tracks: parsedPlaylist,
+        isVisible: isPlaylistVisible,
+        onClose: () => setIsPlaylistVisible(false)
     };
 
     return (
         <>
-            <Header onLogoClick={handleBackToHome} />
+            <Header
+                isSearching={true}
+                onLogoClick={handleBackToHome}
+                isMobile={isMobile}
+                isPlaylistVisible={isPlaylistVisible}
+                onTogglePlaylist={handleTogglePlaylist}
+            />
             <div className="gridded-content">
-                <PlaylistMenu {...playlistMenuProps} />
+                {!isMobile && <PlaylistMenu {...playlistMenuProps} />}
                 <div className="main-content">
                     <BannerArtist {...bannerArtistProps} />
-                    
+
                     {descriptionContent && (
                         <section className="album-description">
                             <div className={`album-description-text ${hasLongContent ? 'long-content' : ''}`}>
@@ -363,16 +388,17 @@ function ArtistDetails() {
                             </div>
                         </section>
                     )}
-                    
+
                     {topTracks.length > 0 && (
                         <Tracklist {...tracklistProps} />
                     )}
-                    
+
                     {similarArtists.length > 0 && (
                         <SimilarGallery {...similarArtistProps} />
                     )}
                 </div>
             </div>
+            {isMobile && <PlaylistMenu {...playlistMenuProps} />}
             <Footer />
         </>
     );

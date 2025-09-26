@@ -8,6 +8,8 @@
 .card-search-gallery-header{
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .card-search-gallery-header-title {

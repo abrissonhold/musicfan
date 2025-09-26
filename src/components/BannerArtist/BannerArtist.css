@@ -162,10 +162,14 @@
         min-height: 250px;
         margin-bottom: var(--dl-layout-space-unit);
     }
-    
-    .banner-artist-name {
-        padding: 0 var(--dl-layout-space-halfunit);
-        font-size: 1.8rem;
+
+.artist-banner-header-name {
+        margin: 0;
+        font-size: 4rem;
+        font-weight: 800;
+        font-family: 'Bricolage Grotesque', var(--dl-font-family-primary);
+        line-height: 1.2;
+        text-align: center;
     }
     
     .banner-artist-body {
@@ -174,7 +178,7 @@
     
     .banner-artist-body-listeners {
         font-size: 1rem;
-        justify-content: center;
+        color: var(--dl-color-gray-700);
     }
     
     .banner-artist-body > div {

@@ -9,6 +9,7 @@ import { injectParams, getFavorites } from "../../helpers/helper";
 import { Tracklist, type TrackListProps } from "../../components/Tracklist/Tracklist";
 import type { TrackItemProps } from "../../components/TrackItem/TrackItem";
 import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
+import { useIsMobile } from "../../helpers/useIsMobile";
 
 interface Album {
     artist: string;
@@ -50,7 +51,13 @@ function AlbumDetails() {
     const [favorites, setFavorites] = useState(() => getFavorites());
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const query = searchParams.get("q");
+    const query = searchParams.get("q");    
+    const isMobile = useIsMobile();
+    const [isPlaylistVisible, setIsPlaylistVisible] = useState(false);
+
+    const handleTogglePlaylist = () => {
+        setIsPlaylistVisible(prev => !prev);
+    };
 
     useEffect(() => {
         const updateFavs = () => setFavorites(getFavorites());
@@ -189,7 +196,13 @@ function AlbumDetails() {
     if (loading) {
         return (
             <>
-                <Header isSearching={true} onLogoClick={handleBackToHome} />
+                <Header 
+                    isSearching={true} 
+                    onLogoClick={handleBackToHome}
+                    isMobile={isMobile}
+                    isPlaylistVisible={isPlaylistVisible}
+                    onTogglePlaylist={handleTogglePlaylist}
+                />
                 <div className="gridded-content">
                     <div className="playlist-loading">
                         <p>Cargando playlist...</p>
@@ -254,14 +267,21 @@ function AlbumDetails() {
     const hasLongContent = descriptionContent.length > 1000;
 
     const playlistMenuProps: PlaylistProps = {
-        tracks: favorites
+        tracks: favorites,
+        isVisible: isPlaylistVisible,
+        onClose: () => setIsPlaylistVisible(false)
     };
 
     return (
         <>
-            <Header onLogoClick={handleBackToHome} />
+            <Header 
+                onLogoClick={handleBackToHome}
+                isMobile={isMobile}
+                isPlaylistVisible={isPlaylistVisible}
+                onTogglePlaylist={handleTogglePlaylist}
+            />
             <div className="gridded-content">
-                <PlaylistMenu {...playlistMenuProps} />
+                {!isMobile && <PlaylistMenu {...playlistMenuProps} />}
                 <div className="main-content">
                     <BasicBanner {...basicBannerProps} />
                     {descriptionContent && (
@@ -276,6 +296,7 @@ function AlbumDetails() {
                     )}
                 </div>
             </div>
+            {isMobile && <PlaylistMenu {...playlistMenuProps} />}
             <Footer />
         </>
     );

@@ -4,9 +4,11 @@ import type { PeekProps } from "../../components/Peek/Peek"
 import { Header } from "../../components/Header/Header"
 import { CardGallery, type CardGalleryProps } from "../../components/CardGallery/CardGallery"
 import { PeekGallery, type PeekGalleryProps } from "../../components/PeekGallery/PeekGallery"
+import { PlaylistMenu, type PlaylistProps } from '../../components/PlaylistMenu/PlaylistMenu'
 import { Footer } from "../../components/Footer/Footer"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useIsMobile } from '../../helpers/useIsMobile'
 
 interface TrackResponse {
   tracks: TrackResponseObject;
@@ -49,7 +51,7 @@ interface ArtistPeek {
   mbid: string;
 }
 
-function injectParams(baseUrl: URL, params: Object){
+function injectParams(baseUrl: URL, params: Object) {
   const newUrl = new URL(baseUrl.toString());
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined) {
@@ -64,9 +66,14 @@ function Index() {
   const [artists, setArtists] = useState<ArtistPeek[]>([]);
   const navigate = useNavigate();
   const baseUrl = new URL('https://ws.audioscrobbler.com/2.0/?');
-  const API_KEY = '38c33b10c98373d07e536e89fee77c1e';  
+  const API_KEY = '38c33b10c98373d07e536e89fee77c1e';
+  const isMobile = useIsMobile();
+  const [isPlaylistVisible, setIsPlaylistVisible] = useState(false);
 
-  // Navigation functions
+  const handleTogglePlaylist = () => {
+    setIsPlaylistVisible(prev => !prev);
+  };
+
   const navigateToTrack = (mbid: string) => {
     navigate(`/track?q=${mbid}`);
   };
@@ -77,7 +84,7 @@ function Index() {
 
   useEffect(() => {
     const fetchTracks = async () => {
-      try{
+      try {
         const topTracksParams = {
           method: 'chart.gettoptracks',
           api_key: API_KEY,
@@ -86,28 +93,28 @@ function Index() {
         };
         let topTracksUrl = injectParams(baseUrl, topTracksParams);
         const response = await fetch(topTracksUrl);
-        if(!response.ok){
+        if (!response.ok) {
           throw new Error("Network error");
         }
-        const topTracksResponse: TrackResponse = await response.json();    
-        for(const currentTrack of topTracksResponse.tracks.track){
+        const topTracksResponse: TrackResponse = await response.json();
+        for (const currentTrack of topTracksResponse.tracks.track) {
           const trackInfoParams = {
             method: 'track.getInfo',
             api_key: API_KEY,
             mbid: currentTrack.mbid,
             format: 'json'
           }
-          let trackInfoUrl = injectParams(baseUrl, trackInfoParams);            
+          let trackInfoUrl = injectParams(baseUrl, trackInfoParams);
           const trackInfo = await fetch(trackInfoUrl);
-          if(!trackInfo.ok) throw new Error("Track info retrieval Error");
+          if (!trackInfo.ok) throw new Error("Track info retrieval Error");
           const retrievedTrackInfo = await trackInfo.json();
-          currentTrack.image = retrievedTrackInfo?.track?.album?.image[3]['#text'] ? 
-          retrievedTrackInfo?.track?.album?.image[3]['#text'] :
-          'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
-        }                
+          currentTrack.image = retrievedTrackInfo?.track?.album?.image[3]['#text'] ?
+            retrievedTrackInfo?.track?.album?.image[3]['#text'] :
+            'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png';
+        }
         setTracks(topTracksResponse.tracks.track);
       }
-      catch(e){
+      catch (e) {
         console.error("Error fetching top tracks: ", e);
       }
     }
@@ -116,18 +123,18 @@ function Index() {
 
   useEffect(() => {
     const fetchTopArtists = async () => {
-      try{
+      try {
         const topArtistParams = {
           method: 'chart.gettopartists',
           api_key: API_KEY,
           limit: 4,
           format: 'json'
         }
-        let topArtistUrl = injectParams(baseUrl, topArtistParams);      
+        let topArtistUrl = injectParams(baseUrl, topArtistParams);
         const response = await fetch(topArtistUrl);
-        if(!response.ok) throw new Error("Network Error");
+        if (!response.ok) throw new Error("Network Error");
         const topArtistResponse = await response.json();
-        for(const currentArtist of topArtistResponse.artists.artist){
+        for (const currentArtist of topArtistResponse.artists.artist) {
           const artistTopAlbumsParams = {
             method: 'artist.gettopalbums',
             api_key: API_KEY,
@@ -137,34 +144,49 @@ function Index() {
           }
           let artistTopAlbumsUrl = injectParams(baseUrl, artistTopAlbumsParams);
           const responseArtist = await fetch(artistTopAlbumsUrl);
-          if(!responseArtist.ok) throw new Error('Artists top albums retrieval Error');
+          if (!responseArtist.ok) throw new Error('Artists top albums retrieval Error');
           const artistTopAlbumsResponse = await responseArtist.json();
           currentArtist.image = artistTopAlbumsResponse.topalbums?.album[0]?.image[2]['#text'];
         }
         setArtists(topArtistResponse.artists.artist);
       }
-      catch(e){
+      catch (e) {
         console.error('Error fetching top artists: ', e)
-      }    
+      }
     }
     fetchTopArtists();
   }, []);
 
-  const trackGalleryProps = generateTrackGallery(tracks, navigateToTrack);  
+  const trackGalleryProps = generateTrackGallery(tracks, navigateToTrack);
   const artistGalleryProps = generateArtistGallery(artists, navigateToArtist);
+  const playlist = localStorage.getItem("favorites") != null ? localStorage.getItem("favorites") : JSON.stringify({ tracks: ['Empty'] });
+  const parsedPlaylist = JSON.parse(playlist as string);
+  const playlistMenuProps: PlaylistProps = {
+    tracks: parsedPlaylist,
+    isVisible: isPlaylistVisible,
+    onClose: () => setIsPlaylistVisible(false),
+  }
+
   return (
     <>
       <div className="index">
-        <Header></Header>
-        <CardGallery {...trackGalleryProps}></CardGallery>
-        <PeekGallery {...artistGalleryProps}></PeekGallery>
-        <Footer></Footer>
+        <Header
+          isMobile={isMobile}
+          isPlaylistVisible={isPlaylistVisible}
+          onTogglePlaylist={handleTogglePlaylist}
+        />
+        <main>
+          <CardGallery {...trackGalleryProps} />
+          <PeekGallery {...artistGalleryProps} />
+        </main>
+        {isMobile && <PlaylistMenu {...playlistMenuProps} />}
+        <Footer />
       </div>
     </>
   )
 }
 
-function generateTrackGallery(tracks: Track[], navigateToTrack: (mbid: string) => void){
+function generateTrackGallery(tracks: Track[], navigateToTrack: (mbid: string) => void) {
   const trackData: CardProps[] = [];
   tracks.forEach((currentTrack) => {
     const track: CardProps = {
@@ -191,7 +213,7 @@ function generateTrackGallery(tracks: Track[], navigateToTrack: (mbid: string) =
   return trackGalleryProps;
 }
 
-function generateArtistGallery(artists: ArtistPeek[], navigateToArtist: (mbid: string) => void){
+function generateArtistGallery(artists: ArtistPeek[], navigateToArtist: (mbid: string) => void) {
   const peekData: PeekProps[] = [];
   artists.forEach((currentArtist) => {
     const artist: PeekProps = {

@@ -10,6 +10,7 @@ import { injectParams, updateHistory } from "../../helpers/helper";
 import type { SearchCardProps } from "../../components/SearchCard/SearchCard";
 import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
 import type { HistoryItem } from "../History/History";
+import { useIsMobile } from "../../helpers/useIsMobile";
 
 interface Track {
     artist: Artist;
@@ -60,6 +61,12 @@ function TrackDetails() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const query = searchParams.get("q");
+    const isMobile = useIsMobile();
+    const [isPlaylistVisible, setIsPlaylistVisible] = useState(false);
+
+    const handleTogglePlaylist = () => {
+        setIsPlaylistVisible(prev => !prev);
+    };
 
     const navigateToTrack = (mbid: string) => {
         navigate(`/track?q=${mbid}`);
@@ -246,7 +253,13 @@ function TrackDetails() {
     if (loading) {
         return (
             <>
-                <Header isSearching={true} onLogoClick={handleBackToHome} />
+                <Header 
+                    isSearching={true} 
+                    onLogoClick={handleBackToHome}
+                    isMobile={isMobile}
+                    isPlaylistVisible={isPlaylistVisible}
+                    onTogglePlaylist={handleTogglePlaylist}
+                />
                 <div className="gridded-content">
                     <div className="main-content">
                         <div className="track-description loading">
@@ -262,7 +275,12 @@ function TrackDetails() {
     if (error || !track) {
         return (
             <>
-                <Header onLogoClick={handleBackToHome} />
+                <Header 
+                    onLogoClick={handleBackToHome}
+                    isMobile={isMobile}
+                    isPlaylistVisible={isPlaylistVisible}
+                    onTogglePlaylist={handleTogglePlaylist}
+                />
                 <div className="gridded-content">
                     <div className="main-content">
                         <div className="track-description empty">
@@ -314,13 +332,22 @@ function TrackDetails() {
 
     const playlist = localStorage.getItem("favorites") || '{"tracks":["Empty"]}';
     const parsedPlaylist = JSON.parse(playlist);
-    const playlistMenuProps: PlaylistProps = { tracks: parsedPlaylist };
+    const playlistMenuProps: PlaylistProps = { 
+        tracks: parsedPlaylist,
+        isVisible: isPlaylistVisible,
+        onClose: () => setIsPlaylistVisible(false)
+    };
 
     return (
         <>
-            <Header onLogoClick={handleBackToHome} />
+            <Header 
+                onLogoClick={handleBackToHome}
+                isMobile={isMobile}
+                isPlaylistVisible={isPlaylistVisible}
+                onTogglePlaylist={handleTogglePlaylist}
+            />
             <div className="gridded-content">
-                <PlaylistMenu {...playlistMenuProps} />
+                {!isMobile && <PlaylistMenu {...playlistMenuProps} />}
                 <div className="main-content">
                     <BasicBanner {...basicBannerProps} />
 
@@ -355,6 +382,7 @@ function TrackDetails() {
                     {similarTracks.length > 0 && <SimilarGallery {...similarGalleryProps} />}
                 </div>
             </div>
+            {isMobile && <PlaylistMenu {...playlistMenuProps} />}
             <Footer />
         </>
     );

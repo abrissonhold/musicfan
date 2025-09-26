@@ -1,31 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./Header.css";
 import SearchBar from "../SearchBar/SearchBar";
-import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
 
 interface HeaderProps {
     onLogoClick?: () => void;
     isSearching?: boolean;
+    isMobile: boolean;
+    isPlaylistVisible: boolean;
+    onTogglePlaylist: () => void;
 }
 
-function Header({ onLogoClick, isSearching }: HeaderProps) {
-    const [isMobile, setIsMobile] = useState(false);
-    const [isPlaylistVisible, setIsPlaylistVisible] = useState(false);
-
-    useEffect(() => {
-        const checkScreenSize = () => {
-            const mobile = window.innerWidth <= 768;
-            setIsMobile(mobile);
-            if (!mobile && isPlaylistVisible) {
-                setIsPlaylistVisible(false);
-            }
-        };
-
-        checkScreenSize();
-        window.addEventListener('resize', checkScreenSize);
-        return () => window.removeEventListener('resize', checkScreenSize);
-    }, [isPlaylistVisible]);
-
+function Header({ onLogoClick, isSearching, isMobile, isPlaylistVisible, onTogglePlaylist }: HeaderProps) {
     const hasFavorites = () => {
         try {
             const favorites = localStorage.getItem("favorites");
@@ -38,40 +23,17 @@ function Header({ onLogoClick, isSearching }: HeaderProps) {
     };
 
     const handleLogoClick = () => {
-        if (isPlaylistVisible) {
-            setIsPlaylistVisible(false);
-        }
         onLogoClick?.();
         window.scrollTo({ top: 0, behavior: "smooth" });
         window.location.href = "/";
     };
 
     const handleToggleFavorites = () => {
-        if (isMobile) {
-            setIsPlaylistVisible(prev => !prev);
-        } else {
-            const sidebar = document.querySelector('.playlist-menu--desktop');
-            if (sidebar) {
-                sidebar.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
+        onTogglePlaylist();
     };
 
     const handleHistoryClick = () => {
-        if (isPlaylistVisible) {
-            setIsPlaylistVisible(false);
-        }
         window.location.href = "/history";
-    };
-
-    const handleClosePlaylist = () => {
-        setIsPlaylistVisible(false);
-    };
-
-    const playlistMenuProps: PlaylistProps = {
-        tracks: [],
-        isVisible: isPlaylistVisible,
-        onClose: handleClosePlaylist
     };
 
     return (
@@ -92,34 +54,27 @@ function Header({ onLogoClick, isSearching }: HeaderProps) {
                     </div>
 
                     <div className="header-actions">
-                        {isMobile && <div >
-                            <img
-                                alt="Favoritos"
-                                src="/src/assets/fav.png"
-                                className={`navbar-image1 header-action-btn favorites-btn ${isMobile && isPlaylistVisible ? 'favorites-btn--active' : ''
-                                    } ${hasFavorites() ? 'has-favorites' : ''}`}
-                                onClick={handleToggleFavorites}
-                                title={isMobile ?
-                                    (isPlaylistVisible ? "Cerrar favoritos" : "Ver favoritos") :
-                                    "Ver favoritos"
-                                }
-                            />
-                        </div>
-                        }
                         <img
                             alt="Historial"
-                            src="src/assets/historial.svg"
+                            src="/src/assets/historial.svg"
                             className="navbar-image1 header-action-icon header-action-btn history-btn"
                             onClick={handleHistoryClick}
                             title="Ver historial"
                         />
+                        {isMobile && (
+                            <div className="mobile-menu-trigger" onClick={handleToggleFavorites}>
+                                <img
+                                    alt="Favoritos"
+                                    src="/src/assets/fav.png"
+                                    className={`navbar-image1 header-action-btn favorites-btn ${isPlaylistVisible ? 'favorites-btn--active' : ''
+                                        } ${hasFavorites() ? 'has-favorites' : ''}`}
+                                    title={isPlaylistVisible ? "Cerrar favoritos" : "Ver favoritos"}
+                                />
+                            </div>
+                        )}
                     </div>
                 </nav>
             </header>
-
-            {isMobile && (
-                <PlaylistMenu {...playlistMenuProps} />
-            )}
         </>
     );
 }

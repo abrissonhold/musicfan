@@ -12,14 +12,14 @@ function BannerArtist({ imageUrl, name, listeners }: BannerArtistProps) {
         <>
             <section className="banner-artist" style={{ backgroundImage: imageUrl ? `url(${imageUrl})` : "none" }}>
                 <div className="banner-artist-body">
-                    <div className="basic-banner-header">
-                        <p className="basic-banner-header-name">{name}</p>
+                    <div className="artist-banner-header">
+                        <p className="artist-banner-header-name">{name}</p>
                     </div>
                     <div>
                         <p className="banner-artist-body-listeners">{listeners} oyentes</p>
                         <div className="banner-artist-actions">
                             <button
-                                className="basic-banner-share-btn"
+                                className="artist-banner-share-btn"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setOpen(true);

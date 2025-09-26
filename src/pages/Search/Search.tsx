@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import { Footer } from "../../components/Footer/Footer";
 import { Header } from "../../components/Header/Header";
 import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
-import type { SearchCardProps } from "../../components/SearchCard/SearchCard";
 import {
     SearchCardGallery,
-    type SearchGalleryProps,
 } from "../../components/SearchCardGallery/SearchCardGallery";
 import "./Search.css";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { useIsMobile } from "../../helpers/useIsMobile";
 
 interface Track {
     name: string;
@@ -41,6 +39,12 @@ function Search() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const query = searchParams.get("q");
+    const isMobile = useIsMobile();
+    const [isPlaylistVisible, setIsPlaylistVisible] = useState(false);
+
+    const handleTogglePlaylist = () => {
+        setIsPlaylistVisible(prev => !prev);
+    };
 
     const navigateToArtist = (mbid: string) => {
         navigate(`/artist?q=${mbid}`);
@@ -165,30 +169,36 @@ function Search() {
     }, [query]);
 
     if (artists && albums && tracks) {
-        const tracksGalleryProps = getTracksProps(tracks, navigateToTrack, navigateToSeeMore, query ? query : '', 'track');
-        const albumGaleryProps = getAlbumsProps(albums, navigateToAlbum, navigateToSeeMore, query ? query : '', 'album');
-        const artistGalleryProps = getArtistsProps(artists, navigateToArtist, navigateToSeeMore, query ? query : '', 'artist');
-        const playlist = localStorage.getItem("favorites") != null ? localStorage.getItem("favorites") : JSON.stringify({tracks: ['Empty']});
-        const parsedPlaylist = JSON.parse(playlist as string);        
+        const tracksGalleryProps = getTracksProps(tracks, navigateToTrack, navigateToSeeMore, query || '', 'track');
+        const albumGaleryProps = getAlbumsProps(albums, navigateToAlbum, navigateToSeeMore, query || '', 'album');
+        const artistGalleryProps = getArtistsProps(artists, navigateToArtist, navigateToSeeMore, query || '', 'artist');
+        const playlist = localStorage.getItem("favorites") || JSON.stringify({tracks: ['Empty']});
+        const parsedPlaylist = JSON.parse(playlist);        
         const playlistMenuProps: PlaylistProps = {
-            tracks: parsedPlaylist
+            tracks: parsedPlaylist,
+            isVisible: isPlaylistVisible,
+            onClose: () => setIsPlaylistVisible(false)
         }
         return (
-            <>
-                <div className="search">
-                    <Header></Header>
-                    <div className="gridded-content">
-                        <PlaylistMenu {...playlistMenuProps}></PlaylistMenu>
-                        <div className="main-content">
-                            {tracksGalleryProps.searchCardPropsArray.length > 0 ? <SearchCardGallery {...tracksGalleryProps}></SearchCardGallery> : <SearchCardGallery galleryTitle="No hay canciones que coincidan con tu búsqueda" searchCardPropsArray={[]} seeMoreRedirect={() => ''}></SearchCardGallery>}
-                            {albumGaleryProps.searchCardPropsArray.length > 0 ? <SearchCardGallery {...albumGaleryProps}></SearchCardGallery> : <SearchCardGallery galleryTitle="No hay álbumes que coincidan con tu búsqueda" searchCardPropsArray={[]} seeMoreRedirect={() => ''}></SearchCardGallery>}
-                            {artistGalleryProps.searchCardPropsArray.length > 0 ? <SearchCardGallery {...artistGalleryProps}></SearchCardGallery> : <SearchCardGallery galleryTitle="No hay artistas que coincidan con tu búsqueda" searchCardPropsArray={[]} seeMoreRedirect={() => ''}></SearchCardGallery>}
-                        </div>
+            <div className="search">
+                <Header 
+                    isMobile={isMobile}
+                    isPlaylistVisible={isPlaylistVisible}
+                    onTogglePlaylist={handleTogglePlaylist}
+                />
+                <div className="gridded-content">
+                    {!isMobile && <PlaylistMenu {...playlistMenuProps} />}
+                    <div className="main-content">
+                        {tracksGalleryProps.searchCardPropsArray.length > 0 ? <SearchCardGallery {...tracksGalleryProps}></SearchCardGallery> : <SearchCardGallery galleryTitle="No hay canciones que coincidan con tu búsqueda" searchCardPropsArray={[]} seeMoreRedirect={() => ''}></SearchCardGallery>}
+                        {albumGaleryProps.searchCardPropsArray.length > 0 ? <SearchCardGallery {...albumGaleryProps}></SearchCardGallery> : <SearchCardGallery galleryTitle="No hay álbumes que coincidan con tu búsqueda" searchCardPropsArray={[]} seeMoreRedirect={() => ''}></SearchCardGallery>}
+                        {artistGalleryProps.searchCardPropsArray.length > 0 ? <SearchCardGallery {...artistGalleryProps}></SearchCardGallery> : <SearchCardGallery galleryTitle="No hay artistas que coincidan con tu búsqueda" searchCardPropsArray={[]} seeMoreRedirect={() => ''}></SearchCardGallery>}
                     </div>
                 </div>
-            </>
+                {isMobile && <PlaylistMenu {...playlistMenuProps} />}
+            </div>
         );
     }
+    return null;
 }
 
 export { Search };
@@ -237,6 +247,7 @@ function getTracksProps(tracks: Track[], navigate: (mbid: string) => void, seeMo
         seeMoreRedirect: () => seeMore(query, type)
     };
 }
+
 function injectParams(baseUrl: URL, params: Object) {
     const newUrl = new URL(baseUrl.toString());
     Object.entries(params).forEach(([key, value]) => {

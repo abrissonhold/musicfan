@@ -1,12 +1,15 @@
 .gridded-content {
     display: grid;
-    grid-template-columns: clamp(15vw, 25%, 20vw) 1fr;
+    grid-template-columns: clamp(15vw, 25%, 20vw) 80vw;
     align-items: start;
 }
 
 @media (max-width: 768px) {
     .gridded-content {
-        grid-template-columns: 1fr;
-        padding: 0 1rem;
+        grid-template-columns: 100vw;
+    }
+    main-content {
+        grid-template-columns: 100vw;
+        padding: 0;
     }
 }

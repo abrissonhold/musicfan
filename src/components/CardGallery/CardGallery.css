@@ -75,6 +75,12 @@
 }
 
 @media (max-width: 480px) {
+    .card-gallery {
+        width: 100vw;
+        padding: 0;
+        overflow: hidden;
+        margin: auto;
+    }
     .card-gallery-body {
         display: flex;
         align-items: center;
@@ -88,6 +94,11 @@
 
     .card-gallery-body::-webkit-scrollbar {
         display: none;
+    }
+    .card-gallery-header-title {
+        font-size: 5rem;
+        padding-left: 0rem;
+        margin-top: 0.5rem;
     }
 }
 
