@@ -209,7 +209,6 @@
     
     .basic-banner-actions {
         justify-content: end;
-        flex-wrap: wrap;
     }
     
     .basic-banner-header-name {
@@ -238,12 +237,14 @@
     }
     
     .basic-banner-header-name {
-        font-size: 1.8rem;
+        font-size: 3rem;
+        font-weight: 700;
     }
     
     .basic-banner-body-listeners {
         font-size: 1rem;
         justify-content: center;
+        color: var(--dl-color-gray-700)
     }
     
     .basic-banner-actions {

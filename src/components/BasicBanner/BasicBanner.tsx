@@ -87,6 +87,15 @@ function BasicBanner({ imageUrl, artist, name, listeners, mbid, onArtistClick, s
                         </div>
 
                         <div className="basic-banner-actions">
+                            <button 
+                                className="basic-banner-share-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setOpen(true);
+                                }}
+                                title={`Compartir "${name}"`}
+                            >   Compartir
+                            </button>                            
                             {showFavoriteButton && mbid && (                                 
                                 <img
                                     className={`basic-banner-fav-icon ${isFav ? 'is-favorite' : ''}`}
@@ -96,16 +105,6 @@ function BasicBanner({ imageUrl, artist, name, listeners, mbid, onArtistClick, s
                                     alt={isFav ? "Quitar de favoritos" : "Agregar a favoritos"}
                                     />
                             )}
-
-                            <button 
-                                className="basic-banner-share-btn"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setOpen(true);
-                                }}
-                                title={`Compartir "${name}"`}
-                            >   Compartir
-                            </button>
                         </div>
                     </div>
                 </div>

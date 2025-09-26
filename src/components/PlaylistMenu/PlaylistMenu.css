@@ -11,7 +11,7 @@
     width: 20vw;
     min-width: 250px;
     position: sticky;
-    top: 90px;
+    top: 80px;
     height: calc(100vh - 100px);
 }
 
@@ -54,6 +54,8 @@
     color: white;
     font-size: 2rem;
     cursor: pointer;
+    padding: 0;
+    align-items: end;
 }
 
 .playlist {

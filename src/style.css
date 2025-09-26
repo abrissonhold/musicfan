@@ -288,7 +288,7 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--dl-color-theme-neutral-light);
+    background: rgba(0, 0, 0, 0);
 }
 
 ::-webkit-scrollbar-thumb {

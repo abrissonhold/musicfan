@@ -1,6 +1,6 @@
 .landing {
     background-color: var(--dl-color-theme-neutral-light);
-    background-image: 
+    background-image:
         radial-gradient(circle at 25% 25%, rgba(150, 133, 198, 0.1) 0%, transparent 50%),
         radial-gradient(circle at 75% 75%, rgba(76, 78, 130, 0.1) 0%, transparent 50%);
     background-attachment: fixed;
@@ -13,25 +13,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
 }
 
 .hero {
-  position: relative;
-  background: url('src/assets/2000.jpg') center/cover no-repeat;
-  color: white;
-  padding: 6rem 1rem;
+    position: relative;
+    background: url('src/assets/2000.jpg') center/cover no-repeat;
+    color: white;
+    padding: 6rem 1rem;
 }
 
 .hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.726); 
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.726);
 }
+
 .hero-content {
-  position: relative; 
+    position: relative;
 }
+
 .hero-content {
     max-width: 800px;
     margin: 0 auto;
@@ -279,6 +281,17 @@
     color: var(--dl-color-primary-700);
 }
 
+.leaflet-container {
+    width: 100%;
+    height: 100%;
+    border-radius: var(--dl-layout-radius-radius8);
+}
+
+.leaflet-pane {
+    width: 100%;
+    height: 100%;
+}
+
 .address-info {
     background: var(--dl-gradient-card);
     padding: var(--dl-layout-space-doubleunit);
@@ -322,6 +335,7 @@
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -337,14 +351,15 @@
 }
 
 @media (max-width: 1024px) {
+
     .about-content,
     .location-content {
-        grid-template-columns: 1fr;
+        grid-template-columns: 80vw;
         gap: var(--dl-layout-space-doubleunit);
     }
-    
+
     .features-grid {
-        grid-template-columns: repeat(auto-fit, minmax(20 vw, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(20vw, 80vw));
     }
 }
 

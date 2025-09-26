@@ -173,14 +173,14 @@
 
 @media (max-width: 1199px) and (min-width: 1024px) {
     .index main {
-        max-width: 1200px;
+        max-width: 80vw;
         padding: var(--dl-layout-space-unit) var(--dl-layout-space-doubleunit);
     }
 }
 
 @media (max-width: 1023px) and (min-width: 768px) {
     .index main {
-        max-width: 100%;
+        max-width: 80vw;
         padding: var(--dl-layout-space-unit);
     }
     
