@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/Header/Header";
 import { Footer } from "../../components/Footer/Footer";
@@ -7,6 +7,7 @@ import L from "leaflet";
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "./Landing.css";
+import { useIsMobile } from "../../helpers/useIsMobile";
 
 interface Feature {
     title: string;
@@ -21,6 +22,9 @@ interface TeamMember {
 
 function Landing() {
     const navigate = useNavigate();
+    const isMobile = useIsMobile();
+    const [isPlaylistVisible, setIsPlaylistVisible] = useState(false);
+    
 
     const handleExploreMusic = () => {
         navigate('/index');
@@ -58,10 +62,17 @@ function Landing() {
 
     ];
 
+    const handleTogglePlaylist = () => {
+        setIsPlaylistVisible(prev => !prev);
+    };
+
     return (
         <div className="landing">
             <Header
                 onLogoClick={() => handleScrollTo('inicio')}
+                isMobile={isMobile}
+                isPlaylistVisible={isPlaylistVisible}
+                onTogglePlaylist={handleTogglePlaylist}
             />
             <section id="inicio" className="hero">
                 <div className="hero-content">

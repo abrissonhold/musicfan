@@ -68,7 +68,6 @@ function getTracklistProps(items: HistoryItem[]) {
             index: index + 1,
             imageUrl: currentItem.image,
             name: currentItem.name,
-            showFavoriteButton: false,
             onClick: () => navigateToTrack(currentItem.mbid)
         }
         return trackItemProp;

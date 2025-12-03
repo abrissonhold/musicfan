@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { getAlbumSearch, getArtistSearch, getTrackSearch, type Album, type Artist, type ArtistSearch, type Track } from "../../helpers/apiCalls";
 import type { TrackItemProps } from "../../components/TrackItem/TrackItem";
 import { defaultImage } from "../../helpers/constants";
+import { useIsMobile } from "../../helpers/useIsMobile";
 
 interface ResultItem {
     name: string;
@@ -23,6 +24,12 @@ function SeeMoreSearch(){
     const type = searchParams.get("type");
     const navigate = useNavigate();
     const PageSize = 10;
+    const isMobile = useIsMobile();
+    const [isPlaylistVisible, setIsPlaylistVisible] = useState(false);
+
+    const handleTogglePlaylist = () => {
+        setIsPlaylistVisible(prev => !prev);
+    };
     
     const navigateToArtist = (mbid: string) => {
         navigate(`/artist?q=${mbid}`);
@@ -112,10 +119,19 @@ function SeeMoreSearch(){
             break;
     }
     
+    function handleScrollTo(arg0: string): void {
+        throw new Error("Function not implemented.");
+    }
+
     return (
         <>
             <div className="search">
-                <Header></Header>
+            <Header
+                onLogoClick={() => handleScrollTo('inicio')}
+                isMobile={isMobile}
+                isPlaylistVisible={isPlaylistVisible}
+                onTogglePlaylist={handleTogglePlaylist}
+            />
                 <div className="gridded-content">
                     <PlaylistMenu {...playlistMenuProps}></PlaylistMenu>
                     <div className="main-content">

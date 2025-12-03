@@ -223,7 +223,12 @@ function AlbumDetails() {
     if (error || !album) {
         return (
             <>
-                <Header onLogoClick={handleBackToHome} />
+                <Header 
+                    onLogoClick={handleBackToHome}
+                    isMobile={isMobile}
+                    isPlaylistVisible={isPlaylistVisible}
+                    onTogglePlaylist={handleTogglePlaylist}
+                />
                 <div className="gridded-content">
                     <div className="playlist-loading">
                         <p>Error en playlist</p>
