@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./History.css"
 import { Header } from "../../components/Header/Header";
 import { PlaylistMenu, type PlaylistProps } from "../../components/PlaylistMenu/PlaylistMenu";
-import { Tracklist, type TrackListProps } from "../../components/Tracklist/Tracklist";
+import { Tracklist } from "../../components/Tracklist/Tracklist";
 import type { TrackItemProps } from "../../components/TrackItem/TrackItem";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "../../helpers/useIsMobile";
